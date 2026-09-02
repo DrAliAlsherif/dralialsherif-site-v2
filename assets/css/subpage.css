@@ -1,0 +1,142 @@
+/* =========================================================
+   Dr. Ali Fathy Alsherif — Workshop profile pages (RTL / Arabic)
+   Self-contained · light + dark aware
+   ========================================================= */
+:root{
+  --indigo-500:#6d5efc; --indigo-600:#5b4bf0; --violet-400:#a78bfa;
+  --cyan-400:#22d3ee; --gold:#c9a227;
+  --bg:#f5f6fd; --bg-alt:#eaedfa; --surface:#ffffff; --surface-2:#f1f2fd;
+  --border:rgba(28,26,80,.12); --border-strong:rgba(28,26,80,.18);
+  --text:#12142e; --text-soft:#464d75; --text-mute:#6e75a2;
+  --brand:var(--indigo-600);
+  --brand-grad:linear-gradient(120deg,#7c5cff 0%,#5b6cf6 46%,#22d3ee 100%);
+  --shadow-sm:0 1px 2px rgba(18,16,60,.06),0 2px 10px rgba(18,16,60,.06);
+  --shadow-md:0 10px 30px rgba(18,16,60,.12);
+  --radius:18px; --radius-sm:12px; --maxw:900px;
+  --ff:'IBM Plex Sans Arabic',system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#060814; --bg-alt:#0a0e20; --surface:#101534; --surface-2:#161c40;
+    --border:rgba(140,158,255,.15); --border-strong:rgba(140,158,255,.24);
+    --text:#eaecff; --text-soft:#b4bbe8; --text-mute:#868ecb;
+    --brand:#8f7bff;
+    --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+    --shadow-md:0 14px 34px rgba(0,0,0,.5);
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:var(--ff);background:var(--bg);color:var(--text);
+  line-height:1.75;-webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+svg{width:1.1em;height:1.1em;fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round}
+
+.wsp-container{width:min(100% - 2.4rem,var(--maxw));margin-inline:auto}
+
+.skip-link{position:absolute;inset-inline-start:-999px;top:0;background:var(--brand);
+  color:#fff;padding:.6rem 1rem;border-radius:0 0 8px 0;z-index:20}
+.skip-link:focus{inset-inline-start:0}
+
+/* ---------- header ---------- */
+.wsp-header{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.wsp-header-inner{display:flex;align-items:center;justify-content:space-between;
+  gap:1rem;padding-block:.8rem}
+.wsp-brand{display:flex;align-items:center;gap:.65rem}
+.wsp-brand-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:11px;
+  background:var(--brand-grad);color:#fff;font-weight:700;font-family:var(--ff);
+  letter-spacing:.5px;box-shadow:var(--shadow-sm)}
+.wsp-brand-text{display:flex;flex-direction:column;line-height:1.25}
+.wsp-brand-name{font-weight:700;font-size:.98rem}
+.wsp-brand-role{font-size:.78rem;color:var(--text-mute)}
+.wsp-back{display:inline-flex;align-items:center;gap:.35rem;font-size:.86rem;font-weight:600;
+  color:var(--text-soft);border:1px solid var(--border-strong);border-radius:999px;
+  padding:.45rem .9rem;transition:.2s}
+.wsp-back:hover{color:var(--brand);border-color:var(--brand)}
+.wsp-back svg{transform:scaleX(-1)}
+
+/* ---------- main doc ---------- */
+.wsp-main{padding-block:2.4rem 3.5rem}
+.wsp-crumbs{font-size:.8rem;color:var(--text-mute);margin-bottom:1.4rem}
+.wsp-crumbs a:hover{color:var(--brand)}
+.wsp-crumbs span[aria-current]{color:var(--text-soft)}
+
+.wsp-doc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:clamp(1.4rem,4vw,3rem);box-shadow:var(--shadow-sm)}
+
+.wsp-kicker{display:inline-block;font-size:.74rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--brand);background:var(--surface-2);
+  border:1px solid var(--border);padding:.3rem .7rem;border-radius:7px;margin:0 0 .9rem}
+.wsp-title{font-size:clamp(1.4rem,3.6vw,2.05rem);line-height:1.4;margin:.2rem 0 .5rem;
+  font-weight:700}
+.wsp-title-en{font-size:.9rem;color:var(--text-mute);margin:0 0 1.3rem;font-style:italic}
+.wsp-overview{font-size:1.03rem;color:var(--text-soft);margin:0 0 1.8rem}
+
+/* ---------- meta box ---------- */
+.wsp-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:.9rem 1.6rem;
+  background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:1.1rem 1.3rem;margin:0 0 2.4rem}
+.wsp-meta > div{display:flex;flex-direction:column;gap:.15rem}
+.wsp-meta-wide{grid-column:1 / -1}
+.wsp-meta-k{font-size:.72rem;font-weight:700;letter-spacing:.06em;color:var(--text-mute);
+  text-transform:uppercase}
+.wsp-meta-v{font-size:.92rem;color:var(--text)}
+@media (max-width:560px){.wsp-meta{grid-template-columns:1fr}.wsp-meta-wide{grid-column:auto}}
+
+/* ---------- sections ---------- */
+.wsp-section{margin:0 0 2.2rem}
+.wsp-section h2{display:flex;align-items:center;gap:.7rem;font-size:1.15rem;font-weight:700;
+  margin:0 0 .9rem;padding-bottom:.6rem;border-bottom:2px solid var(--border)}
+.wsp-num{display:grid;place-items:center;width:1.7rem;height:1.7rem;flex:none;
+  font-size:.9rem;font-weight:700;color:#fff;background:var(--brand-grad);border-radius:8px}
+.wsp-lead{margin:0 0 .7rem;color:var(--text-soft);font-size:.95rem}
+
+.wsp-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.wsp-list li{position:relative;padding-inline-start:1.6rem;color:var(--text-soft);font-size:.97rem}
+.wsp-list li::before{content:"";position:absolute;inset-inline-start:.15rem;top:.62em;
+  width:.5rem;height:.5rem;border-radius:50%;background:var(--violet-400)}
+.wsp-list-num{counter-reset:c}
+.wsp-list-num li{counter-increment:c}
+.wsp-list-num li::before{content:counter(c);inset-inline-start:0;top:0;width:1.35rem;height:1.35rem;
+  border-radius:6px;background:var(--surface-2);border:1px solid var(--border-strong);
+  color:var(--brand);font-size:.75rem;font-weight:700;display:grid;place-items:center}
+.wsp-list-num li{padding-inline-start:1.9rem}
+.wsp-list-check li::before{content:"";inset-inline-start:.1rem;top:.35em;width:.7rem;height:.7rem;
+  border-radius:0;background:none;border:solid var(--brand);border-width:0 0 2px 2px;
+  transform:rotate(-45deg)}
+.wsp-list-check li{padding-inline-start:1.7rem}
+
+/* ---------- cta ---------- */
+.wsp-cta{margin-top:2.6rem;padding:1.5rem;text-align:center;border:1px dashed var(--border-strong);
+  border-radius:var(--radius-sm);background:var(--surface-2)}
+.wsp-cta p{margin:0 0 .9rem;color:var(--text-soft);font-size:.98rem}
+.wsp-btn{display:inline-block;background:var(--brand-grad);color:#fff;font-weight:700;
+  font-size:.92rem;padding:.7rem 1.6rem;border-radius:999px;box-shadow:var(--shadow-sm);
+  transition:transform .2s,box-shadow .2s}
+.wsp-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+
+/* ---------- index cards ---------- */
+.wsp-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+  gap:1rem;margin-top:1.8rem}
+.wsp-card{display:flex;flex-direction:column;gap:.5rem;padding:1.2rem;background:var(--surface-2);
+  border:1px solid var(--border);border-radius:var(--radius-sm);transition:.2s}
+.wsp-card:hover{border-color:var(--brand);transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.wsp-card-num{font-size:.8rem;font-weight:700;color:var(--brand)}
+.wsp-card-title{font-weight:600;font-size:.98rem;line-height:1.5;flex:1}
+.wsp-card-topic{font-size:.74rem;font-weight:600;color:var(--text-mute);
+  background:var(--surface);border:1px solid var(--border);border-radius:6px;
+  padding:.25rem .6rem;align-self:flex-start}
+
+/* ---------- footer ---------- */
+.wsp-footer{border-top:1px solid var(--border);padding-block:1.6rem;font-size:.83rem;
+  color:var(--text-mute)}
+.wsp-footer .wsp-container{display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;
+  align-items:center;justify-content:space-between}
+.wsp-footer a:hover{color:var(--brand)}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}

@@ -578,6 +578,16 @@
       { icon: "transform", en: ["Digital Transformation", "Strategy and roadmaps to modernise information environments."], ar: ["التحول الرقمي", "الاستراتيجيات وخرائط الطريق لتحديث بيئات المعلومات."] },
     ],
 
+    // TODO(articles): add posts here — newest first. Create the HTML page under
+    // articles/ (copy articles/_template.html) and point "url" at it.
+    // { slug, date: "YYYY-MM-DD", url: "articles/my-post.html",
+    //   title: { en, ar }, excerpt: { en, ar } }
+    articles: [],
+
+    // TODO(partners): add { name, img: "assets/img/partners/x.svg", url? } entries.
+    // While empty, a text-chip fallback (PARTNER_FALLBACK) is shown instead.
+    partners: [],
+
     gallery: [
       // Conferences
       { img: "assets/img/gallery/ala-sharjah-1.jpg", cat: "conf", en: "ALA Conference — Sharjah", ar: "مؤتمر جمعية المكتبات الأمريكية — الشارقة" },
@@ -681,6 +691,7 @@
       "nav.about": "About", "nav.expertise": "Expertise", "nav.experience": "Experience",
       "nav.books": "Books", "nav.research": "Research", "nav.projects": "Projects", "nav.speaking": "Speaking",
       "nav.gallery": "Gallery", "nav.services": "Services", "nav.contact": "Contact", "nav.cv": "Download CV",
+      "nav.workshops": "Workshops", "nav.articles": "Articles", "nav.mediakit": "Media kit",
       "search.placeholder": "Search books, research, workshops…",
       "hero.eyebrow": "Dubai, United Arab Emirates · Golden Visa Holder",
       "hero.hello": "Dr. Ali Fathy", "hero.name": "Alsherif",
@@ -746,6 +757,18 @@
       "footer.rights": "© 2026 Dr. Ali Fathy Alsherif. All rights reserved.",
       "footer.made": "Designed & built as a personal knowledge brand.",
       "research.all": "All",
+      "workshops.all": "Browse all workshop briefs",
+      "articles.kicker": "Writing", "articles.title": "Articles & insights",
+      "articles.sub": "Notes on AI in libraries, digital repositories and knowledge management.",
+      "articles.all": "All articles", "articles.empty": "New articles are on the way — check back soon.",
+      "articles.read": "Read",
+      "partners.kicker": "Trusted by", "partners.title": "Institutions & partners",
+      "partners.sub": "A selection of universities, government bodies and cultural institutions I have worked with.",
+      "impact.workshops": "Workshops delivered", "impact.trained": "Professionals trained",
+      "impact.institutions": "Institutions served", "impact.talks": "Conference talks",
+      "services.book": "Book a consultation",
+      "form.sending": "Sending…", "form.sent": "Thank you — your message has been sent.",
+      "form.failed": "Could not send. Opening your email app instead…",
     },
     ar: {
       "a11y.skip": "تخطَّ إلى المحتوى الرئيسي",
@@ -753,6 +776,7 @@
       "nav.about": "نبذة", "nav.expertise": "الخبرات", "nav.experience": "المسيرة",
       "nav.books": "الكتب", "nav.research": "الأبحاث", "nav.projects": "المشاريع", "nav.speaking": "المؤتمرات",
       "nav.gallery": "المعرض", "nav.services": "الخدمات", "nav.contact": "تواصل", "nav.cv": "تحميل السيرة",
+      "nav.workshops": "ورش العمل", "nav.articles": "مقالات", "nav.mediakit": "الحقيبة الإعلامية",
       "search.placeholder": "ابحث في الكتب والأبحاث والورش…",
       "hero.eyebrow": "دبي، الإمارات العربية المتحدة · حاصل على الإقامة الذهبية",
       "hero.hello": "د. علي فتحي", "hero.name": "الشريف",
@@ -818,6 +842,18 @@
       "footer.rights": "© 2026 د. علي فتحي الشريف. جميع الحقوق محفوظة.",
       "footer.made": "صُمّم وبُني كعلامة معرفية شخصية.",
       "research.all": "الكل",
+      "workshops.all": "تصفّح جميع حقائب الورش",
+      "articles.kicker": "كتابات", "articles.title": "مقالات ورؤى",
+      "articles.sub": "ملاحظات حول الذكاء الاصطناعي في المكتبات والمستودعات الرقمية وإدارة المعرفة.",
+      "articles.all": "كل المقالات", "articles.empty": "مقالات جديدة في الطريق — تابعنا قريبًا.",
+      "articles.read": "اقرأ",
+      "partners.kicker": "يثقون بي", "partners.title": "جهات وشركاء",
+      "partners.sub": "مختارات من الجامعات والجهات الحكومية والمؤسسات الثقافية التي عملت معها.",
+      "impact.workshops": "ورشة قُدّمت", "impact.trained": "متخصص تم تدريبه",
+      "impact.institutions": "جهة تعاونت معها", "impact.talks": "محاضرة في مؤتمرات",
+      "services.book": "احجز استشارة",
+      "form.sending": "جارٍ الإرسال…", "form.sent": "شكرًا لك — تم إرسال رسالتك.",
+      "form.failed": "تعذّر الإرسال. سيُفتح تطبيق البريد بدلًا من ذلك…",
     },
   };
 
@@ -847,7 +883,9 @@
   };
 
   /* ---------------- State ---------------- */
-  let lang = localStorage.getItem("af-lang") || "en";
+  // Remembered choice wins; otherwise default to Arabic for Arabic-locale browsers.
+  let lang = localStorage.getItem("af-lang")
+    || ((navigator.language || navigator.userLanguage || "").toLowerCase().indexOf("ar") === 0 ? "ar" : "en");
   const $ = (s, c = document) => c.querySelector(s);
   const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
   const t = (k) => (I18N[lang] && I18N[lang][k]) || (I18N.en[k] || k);
@@ -1066,9 +1104,54 @@
         </div>
       </article>`).join("");
 
+    // Articles / blog
+    const ag = $("#articlesGrid");
+    if (ag) {
+      if (!DATA.articles || !DATA.articles.length) {
+        ag.innerHTML = `<p class="articles-empty">${t("articles.empty")}</p>`;
+      } else {
+        ag.innerHTML = DATA.articles.map((x) => {
+          const d = new Date(x.date);
+          const ds = isNaN(d) ? x.date : d.toLocaleDateString(lang === "ar" ? "ar" : "en-GB",
+            { year: "numeric", month: "long", day: "numeric" });
+          return `<a class="acard reveal" href="${x.url}">
+            <time datetime="${x.date}">${ds}</time>
+            <h3>${x.title[lang]}</h3>
+            <p>${x.excerpt[lang]}</p>
+            <span class="acard-more">${t("articles.read")} →</span>
+          </a>`;
+        }).join("");
+      }
+    }
+
+    // Partners strip
+    const ps = $("#partnersStrip");
+    if (ps) {
+      if (DATA.partners && DATA.partners.length) {
+        ps.innerHTML = DATA.partners.map((p) => {
+          const img = `<img src="${p.img}" alt="${p.name}" loading="lazy" />`;
+          return p.url ? `<a href="${p.url}" target="_blank" rel="noopener noreferrer">${img}</a>` : img;
+        }).join("");
+      } else {
+        ps.innerHTML = PARTNER_FALLBACK.map((n) => `<span>${n[lang]}</span>`).join("");
+      }
+    }
+
     bindLightboxTargets();
     observeReveal();
   }
+
+  /* Text fallback until real partner logos land in assets/img/partners/ */
+  const PARTNER_FALLBACK = [
+    { en: "Jumeira University", ar: "جامعة جميرا" },
+    { en: "Alhosn University", ar: "جامعة الحصن" },
+    { en: "42 Abu Dhabi", ar: "42 أبوظبي" },
+    { en: "Juma Al Majid Center", ar: "مركز جمعة الماجد" },
+    { en: "Mohammed Bin Rashid Library", ar: "مكتبة محمد بن راشد" },
+    { en: "Qasr Al Watan Library", ar: "مكتبة قصر الوطن" },
+    { en: "National Library & Archives", ar: "الأرشيف والمكتبة الوطنية" },
+    { en: "Sharjah Book Authority", ar: "هيئة الشارقة للكتاب" },
+  ];
 
   function renderResearch(filter) {
     $("#researchGrid").innerHTML = DATA.research.map((x, i) => {
@@ -1349,24 +1432,77 @@
   }
 
   /* ---------------- Contact form ---------------- */
+  const WEB3FORMS_PLACEHOLDER = "TODO_WEB3FORMS_ACCESS_KEY";
+
+  function mailtoFallback(d) {
+    const subject = encodeURIComponent(`[Website] ${d.topic} — ${d.name}`);
+    const body = encodeURIComponent(
+      `Name: ${d.name}\nEmail: ${d.email}\nOrganisation: ${d.org}\nTopic: ${d.topic}\n\n${d.message}`);
+    window.location.href = `mailto:a.elsherif79@gmail.com?subject=${subject}&body=${body}`;
+  }
+
   function initForm() {
     const form = $("#contactForm"), note = $("#formNote");
-    form.addEventListener("submit", (e) => {
+    if (!form) return;
+    const keyEl = $("#cf-access-key");
+    const hasRealKey = keyEl && keyEl.value && keyEl.value !== WEB3FORMS_PLACEHOLDER;
+
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const name = $("#cf-name").value.trim();
-      const email = $("#cf-email").value.trim();
-      const msg = $("#cf-msg").value.trim();
-      if (!name || !email || !msg) {
+      const d = {
+        name: $("#cf-name").value.trim(),
+        email: $("#cf-email").value.trim(),
+        org: $("#cf-org").value.trim(),
+        topic: $("#cf-topic").value,
+        message: $("#cf-msg").value.trim(),
+      };
+      if (!d.name || !d.email || !d.message) {
         note.textContent = t("form.err"); note.className = "form-note err"; return;
       }
-      const org = $("#cf-org").value.trim();
-      const topic = $("#cf-topic").value;
-      const subject = encodeURIComponent(`[Website] ${topic} — ${name}`);
-      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nOrganisation: ${org}\nTopic: ${topic}\n\n${msg}`);
-      note.textContent = t("form.ok"); note.className = "form-note ok";
-      window.location.href = `mailto:a.elsherif79@gmail.com?subject=${subject}&body=${body}`;
-      form.reset();
+
+      // No real Web3Forms key yet → keep the zero-backend mailto behaviour.
+      if (!hasRealKey) {
+        note.textContent = t("form.ok"); note.className = "form-note ok";
+        mailtoFallback(d); form.reset(); return;
+      }
+
+      const btn = form.querySelector('button[type="submit"]');
+      note.textContent = t("form.sending"); note.className = "form-note";
+      if (btn) btn.disabled = true;
+      try {
+        const res = await fetch(form.action, {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: new FormData(form),
+        });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        note.textContent = t("form.sent"); note.className = "form-note ok";
+        form.reset();
+      } catch (err) {
+        note.textContent = t("form.failed"); note.className = "form-note err";
+        setTimeout(() => mailtoFallback(d), 800);
+      } finally {
+        if (btn) btn.disabled = false;
+      }
     });
+  }
+
+  /* Prefill the contact form from ?ws=<workshop-slug> or ?topic=<n> */
+  function prefillFromQuery() {
+    const params = new URLSearchParams(location.search);
+    const ws = params.get("ws");
+    const topicEl = $("#cf-topic"), msgEl = $("#cf-msg");
+    if (ws && topicEl && msgEl) {
+      const w = DATA.workshops.find((x) => x.slug === ws);
+      if (w) {
+        const title = lang === "ar" ? w.ar : w.en;
+        // "Training & workshops" is option index 2
+        topicEl.selectedIndex = 2;
+        msgEl.value = lang === "ar"
+          ? `أرغب في حجز/تنظيم ورشة: «${title}». يرجى التواصل معي بالتفاصيل.`
+          : `I'd like to book/host the workshop: "${title}". Please get in touch with details.`;
+      }
+    }
   }
 
   /* ---------------- Init ---------------- */
@@ -1378,6 +1514,7 @@
     initScroll();
     initMenu();
     initForm();
+    prefillFromQuery();
 
     $("#themeToggle").addEventListener("click", toggleTheme);
     $("#langToggle").addEventListener("click", () => setLang(lang === "ar" ? "en" : "ar"));

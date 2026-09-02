@@ -1,0 +1,12 @@
+dralialsherif.com
+
+# HOW TO USE
+# 1. Buy the domain (e.g. dralialsherif.com or a .ae domain).
+# 2. Rename this file to exactly:  CNAME   (no extension), one line, your domain.
+# 3. At your DNS provider add either:
+#      - four A records for the apex @  ->  185.199.108.153 / .109.153 / .110.153 / .111.153
+#      - and a CNAME for www  ->  dralialsherif.github.io
+# 4. GitHub repo → Settings → Pages → set the custom domain, tick "Enforce HTTPS".
+# 5. Replace every https://dralialsherif.github.io/dralialsherif-site-v2 reference
+#    with https://<your-domain> in: index.html, ar/index.html, sitemap.xml,
+#    robots.txt, and the workshop pages (tools/build.py does this in bulk).

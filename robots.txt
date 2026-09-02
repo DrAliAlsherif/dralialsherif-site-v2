@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dralialsherif.github.io/dralialsherif-site-v2/sitemap.xml
