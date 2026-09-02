@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dr. Ali Fathy Alsherif — Introduction</title>
+<meta name="description" content="60-second professional introduction — Library &amp; Information Science expert, AI trainer and digital transformation consultant." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --ink:#05060f;
+  --indigo:#6d5efc; --violet:#a78bfa; --cyan:#22d3ee; --cyan-soft:#67e8f9;
+  --gold:#e6c65a;
+  --text:#f2f4ff; --soft:#b9c0e6; --mute:#7d86b8;
+  --grad:linear-gradient(100deg,#a78bfa 0%,#7c5cff 34%,#22d3ee 100%);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --ff:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --ffh:'Sora',var(--ff);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;background:#04050c;color:var(--text);font-family:var(--ff);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100dvh;gap:18px;padding:16px;overflow:hidden;
+}
+
+/* ---------- stage ---------- */
+.frame{display:grid;place-items:center;flex:0 0 auto}
+.stage{
+  position:relative;width:1280px;height:720px;flex:none;
+  background:radial-gradient(70% 80% at 18% 4%,rgba(124,92,255,.28),transparent 62%),
+             radial-gradient(60% 70% at 88% 10%,rgba(34,211,238,.20),transparent 64%),
+             radial-gradient(60% 60% at 50% 108%,rgba(167,139,250,.16),transparent 62%),
+             #05060f;
+  border-radius:16px;overflow:hidden;transform-origin:center center;
+  box-shadow:0 40px 120px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.07);
+}
+#net{position:absolute;inset:0;width:100%;height:100%}
+.vignette{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(72% 72% at 50% 46%,transparent 42%,rgba(2,3,10,.72) 100%)}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.055;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ---------- scenes ---------- */
+.scene{
+  position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  padding:0 96px;opacity:0;visibility:hidden;transition:opacity .7s var(--ease);
+}
+.scene.on{opacity:1;visibility:visible}
+.scene[data-scene="0"]{align-items:center;text-align:center;padding:0 80px}
+.scene[data-scene="5"]{align-items:center;text-align:center;padding:0 80px}
+
+/* generic reveal */
+.r{opacity:0;transform:translateY(26px);filter:blur(6px);
+   transition:opacity .85s var(--ease),transform .85s var(--ease),filter .85s var(--ease);
+   transition-delay:calc(var(--i,0) * 90ms)}
+.scene.on .r{opacity:1;transform:none;filter:blur(0)}
+
+.eyebrow{font-family:var(--ffh);font-weight:600;font-size:15px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--cyan-soft)}
+.eyebrow .dot{display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:var(--cyan);margin-inline-end:12px;vertical-align:middle;
+  box-shadow:0 0 14px var(--cyan)}
+
+h1{font-family:var(--ffh);font-weight:800;letter-spacing:-.035em;line-height:1;
+   font-size:92px;margin:20px 0 0;
+   background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.name-ar{font-size:27px;color:var(--soft);margin-top:16px;letter-spacing:.02em;direction:rtl}
+.roles{margin-top:26px;font-family:var(--ffh);font-weight:600;font-size:22px;color:var(--text);line-height:1.7}
+.roles b{color:var(--cyan-soft);font-weight:600}
+.rule{width:0;height:2px;margin:32px auto 0;background:var(--grad);border-radius:2px;
+  transition:width 1.1s var(--ease) .5s}
+.scene.on .rule{width:340px}
+
+h2{font-family:var(--ffh);font-weight:700;font-size:19px;letter-spacing:.2em;
+   text-transform:uppercase;color:var(--cyan-soft);margin:0 0 22px}
+.lead{font-family:var(--ffh);font-weight:700;font-size:52px;line-height:1.14;
+  letter-spacing:-.028em;margin:0;max-width:19ch}
+.lead .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.body{margin-top:22px;font-size:21px;line-height:1.6;color:var(--soft);max-width:62ch}
+
+/* stats */
+.stats{display:flex;gap:56px;margin-top:44px}
+.stat .num{font-family:var(--ffh);font-weight:800;font-size:60px;letter-spacing:-.03em;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.stat .lbl{margin-top:8px;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:14px;max-width:1000px;margin-top:6px}
+.chip{font-family:var(--ffh);font-weight:600;font-size:21px;padding:14px 26px;border-radius:999px;
+  background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.13);
+  color:var(--text);backdrop-filter:blur(8px)}
+.chip.hot{border-color:rgba(103,232,249,.5);background:rgba(34,211,238,.11);color:#d8fbff;
+  box-shadow:0 0 34px rgba(34,211,238,.16)}
+
+/* service cards */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:6px}
+.card{padding:26px 24px;border-radius:18px;background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px)}
+.card svg{width:30px;height:30px;stroke:var(--cyan-soft);fill:none;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round}
+.card h3{font-family:var(--ffh);font-weight:700;font-size:21px;margin:14px 0 6px;letter-spacing:-.01em}
+.card p{margin:0;font-size:15px;line-height:1.5;color:var(--mute)}
+
+/* books */
+.books{display:flex;gap:26px;align-items:flex-end;margin-top:8px}
+.book{width:168px;height:236px;border-radius:6px 12px 12px 6px;padding:22px 18px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  box-shadow:0 26px 54px rgba(0,0,0,.55),inset 3px 0 0 rgba(255,255,255,.22)}
+.book .t{font-family:var(--ffh);font-weight:700;font-size:16px;line-height:1.28;color:#fff}
+.book .y{font-size:13px;letter-spacing:.16em;color:rgba(255,255,255,.72)}
+.b1{background:linear-gradient(155deg,#7c5cff,#22d3ee)}
+.b2{background:linear-gradient(155deg,#4a3ad6,#7c3aed)}
+.b3{background:linear-gradient(155deg,#0b7a92,#12b3d6)}
+.badges{display:flex;flex-direction:column;gap:16px;margin-inline-start:44px}
+.badge{display:flex;align-items:center;gap:16px}
+.badge .bn{font-family:var(--ffh);font-weight:800;font-size:40px;line-height:1;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;min-width:64px}
+.badge .bl{font-size:16px;color:var(--soft);line-height:1.35}
+.award{margin-top:6px;display:inline-flex;align-items:center;gap:12px;padding:13px 22px;border-radius:999px;
+  background:rgba(230,198,90,.1);border:1px solid rgba(230,198,90,.42);color:var(--gold);
+  font-family:var(--ffh);font-weight:600;font-size:16px}
+.award svg{width:19px;height:19px;stroke:var(--gold);fill:none;stroke-width:1.8}
+
+/* closing */
+.cta{font-family:var(--ffh);font-weight:800;font-size:60px;line-height:1.14;letter-spacing:-.03em;
+  margin:0;max-width:18ch}
+.url{margin-top:34px;font-family:var(--ffh);font-weight:700;font-size:29px;letter-spacing:-.01em;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tags{margin-top:20px;font-size:17px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+
+/* brandmark + captions */
+.brandmark{position:absolute;inset-block-end:26px;inset-inline-start:34px;display:flex;align-items:center;gap:11px;
+  opacity:0;transition:opacity .8s var(--ease)}
+.stage.playing .brandmark{opacity:.92}
+.brandmark .sq{width:30px;height:30px;border-radius:9px;background:var(--grad);
+  display:grid;place-items:center;font-family:var(--ffh);font-weight:800;font-size:15px;color:#fff}
+.brandmark span{font-family:var(--ffh);font-weight:600;font-size:14px;color:var(--soft)}
+
+.captions{position:absolute;inset-block-end:26px;left:50%;transform:translateX(-50%);
+  max-width:76%;text-align:center;pointer-events:none}
+.captions b{display:inline-block;font-size:20px;line-height:1.45;font-weight:500;
+  background:rgba(4,6,16,.74);border:1px solid rgba(255,255,255,.1);
+  padding:9px 20px;border-radius:12px;backdrop-filter:blur(10px);
+  opacity:0;transition:opacity .3s ease}
+.captions.show b{opacity:1}
+.stage.nocaps .captions{display:none}
+
+/* progress */
+.bar{position:absolute;inset-block-start:0;inset-inline-start:0;height:3px;width:0;
+  background:var(--grad);box-shadow:0 0 16px rgba(124,92,255,.75)}
+
+/* poster / idle */
+.poster{position:absolute;inset:0;display:grid;place-items:center;z-index:5;
+  background:rgba(4,6,16,.55);backdrop-filter:blur(3px);transition:opacity .5s ease}
+.stage.playing .poster{opacity:0;pointer-events:none}
+.playbtn{width:106px;height:106px;border-radius:50%;border:0;cursor:pointer;
+  background:var(--grad);display:grid;place-items:center;
+  box-shadow:0 0 0 12px rgba(124,92,255,.14),0 24px 60px rgba(0,0,0,.5)}
+.playbtn svg{width:38px;height:38px;fill:#fff;margin-inline-start:6px}
+.poster .hint{position:absolute;inset-block-end:76px;font-size:15px;color:var(--soft);letter-spacing:.05em}
+
+/* ---------- controls ---------- */
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+.btn{font-family:var(--ffh);font-weight:600;font-size:13.5px;color:var(--soft);cursor:pointer;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.13);
+  padding:9px 16px;border-radius:10px;transition:.2s}
+.btn:hover{color:#fff;border-color:rgba(255,255,255,.3)}
+.btn[aria-pressed="true"]{color:#06121a;background:var(--cyan-soft);border-color:var(--cyan-soft)}
+.tick{font-size:12.5px;color:#5c6597;font-family:var(--ffh);margin-inline-start:4px}
+
+/* embedded in the site modal */
+body.embed{background:transparent;padding:0;gap:12px;justify-content:center}
+body.embed .stage{box-shadow:0 0 0 1px rgba(255,255,255,.09)}
+</style>
+</head>
+<body>
+
+<div class="frame">
+  <div class="stage" id="stage">
+    <canvas id="net"></canvas>
+    <div class="vignette"></div>
+    <div class="grain"></div>
+    <div class="bar" id="bar"></div>
+
+    <!-- 0 · OPENING -->
+    <section class="scene" data-scene="0">
+      <div class="eyebrow r" style="--i:0"><i class="dot"></i>Dubai · United Arab Emirates</div>
+      <h1 class="r" style="--i:1">Dr. Ali Fathy Alsherif</h1>
+      <div class="name-ar r" style="--i:2">د. علي فتحي الشريف</div>
+      <div class="rule"></div>
+      <div class="roles r" style="--i:4">
+        <b>Library &amp; Information Science Expert</b> · <b>AI Trainer</b><br />
+        Digital Transformation Consultant
+      </div>
+    </section>
+
+    <!-- 1 · PROFILE -->
+    <section class="scene" data-scene="1">
+      <h2 class="r" style="--i:0">Professional Profile</h2>
+      <p class="lead r" style="--i:1">Two decades engineering <span class="g">knowledge environments</span>.</p>
+      <p class="body r" style="--i:2">Building modern, data-driven information ecosystems across leading academic
+        and government institutions in the UAE — from digital repositories and large-scale
+        digitization to AI-enabled knowledge services.</p>
+      <div class="stats">
+        <div class="stat r" style="--i:3"><div class="num" data-count="23">0</div><div class="lbl">Years</div></div>
+        <div class="stat r" style="--i:4"><div class="num" data-count="9">0</div><div class="lbl">Major projects</div></div>
+        <div class="stat r" style="--i:5"><div class="num" data-count="18" data-suffix="+">0</div><div class="lbl">Workshops</div></div>
+        <div class="stat r" style="--i:6"><div class="num" data-count="13">0</div><div class="lbl">Conferences</div></div>
+      </div>
+    </section>
+
+    <!-- 2 · EXPERTISE -->
+    <section class="scene" data-scene="2">
+      <h2 class="r" style="--i:0">Expertise</h2>
+      <div class="chips">
+        <span class="chip hot r" style="--i:1">Artificial Intelligence</span>
+        <span class="chip hot r" style="--i:2">Digital Transformation</span>
+        <span class="chip r" style="--i:3">Library Automation</span>
+        <span class="chip r" style="--i:4">Digital Repositories</span>
+        <span class="chip r" style="--i:5">Archives &amp; Preservation</span>
+        <span class="chip r" style="--i:6">Knowledge Management</span>
+        <span class="chip r" style="--i:7">Metadata Standards</span>
+        <span class="chip r" style="--i:8">Research Support</span>
+        <span class="chip hot r" style="--i:9">Prompt Engineering</span>
+        <span class="chip r" style="--i:10">Training &amp; Capacity</span>
+      </div>
+    </section>
+
+    <!-- 3 · SERVICES -->
+    <section class="scene" data-scene="3">
+      <h2 class="r" style="--i:0">Services</h2>
+      <div class="cards">
+        <div class="card r" style="--i:1">
+          <svg viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.4"/></svg>
+          <h3>AI Consulting</h3><p>Generative AI adoption and smart services, applied responsibly.</p>
+        </div>
+        <div class="card r" style="--i:2">
+          <svg viewBox="0 0 24 24"><path d="M3 7c0-1.7 4-3 9-3s9 1.3 9 3-4 3-9 3-9-1.3-9-3z"/><path d="M3 7v10c0 1.7 4 3 9 3s9-1.3 9-3V7"/><path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></svg>
+          <h3>Digital Repositories</h3><p>End-to-end DSpace and Fedora builds for open access.</p>
+        </div>
+        <div class="card r" style="--i:3">
+          <svg viewBox="0 0 24 24"><path d="M4 5h16v4H4zM5 9v10h14V9"/><path d="M10 13h4"/></svg>
+          <h3>Archives &amp; Automation</h3><p>ILS deployment, digital archiving and heritage preservation.</p>
+        </div>
+        <div class="card r" style="--i:4">
+          <svg viewBox="0 0 24 24"><path d="M12 4L3 8l9 4 9-4-9-4z"/><path d="M3 13l9 4 9-4"/><path d="M3 17.5l9 4 9-4"/></svg>
+          <h3>Training Programmes</h3><p>Tailored development for librarians and knowledge teams.</p>
+        </div>
+        <div class="card r" style="--i:5">
+          <svg viewBox="0 0 24 24"><path d="M4 19V6a2 2 0 012-2h9l5 5v10a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M14 4v5h5"/><path d="M8 13h7M8 16.5h5"/></svg>
+          <h3>Workshops</h3><p>Hands-on sessions in AI, metadata and digitization.</p>
+        </div>
+        <div class="card r" style="--i:6">
+          <svg viewBox="0 0 24 24"><path d="M3 20l4.5-4.5M21 4l-8 8"/><circle cx="16.5" cy="7.5" r="3.5"/><path d="M4 12h4M4 16h3"/></svg>
+          <h3>Digital Transformation</h3><p>Strategy and roadmaps to modernise information environments.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 · PUBLICATIONS -->
+    <section class="scene" data-scene="4">
+      <h2 class="r" style="--i:0">Publications &amp; Recognition</h2>
+      <div style="display:flex;align-items:flex-end">
+        <div class="books">
+          <div class="book b1 r" style="--i:1"><div class="t">AI Prompt Engineering in Libraries &amp; Archives</div><div class="y">2026</div></div>
+          <div class="book b2 r" style="--i:2"><div class="t">Digital Repositories &amp; Open Access</div><div class="y">2021</div></div>
+          <div class="book b3 r" style="--i:3"><div class="t">Digitization of Arab Heritage in the UAE</div><div class="y">2019</div></div>
+        </div>
+        <div class="badges">
+          <div class="badge r" style="--i:4"><span class="bn">15+</span><span class="bl">Peer-reviewed research<br />papers &amp; articles</span></div>
+          <div class="badge r" style="--i:5"><span class="bn">3</span><span class="bl">Books with leading<br />Arab academic publishers</span></div>
+          <div class="r" style="--i:6">
+            <div class="award"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="5"/><path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5"/></svg>
+              Sharjah Award for Library Literature · 2016</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 · CLOSING -->
+    <section class="scene" data-scene="5">
+      <p class="cta r" style="--i:0">Let's build the <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">future of knowledge</span>.</p>
+      <div class="url r" style="--i:2">dralialsherif.github.io</div>
+      <div class="tags r" style="--i:3">Training · Consulting · AI Solutions · Digital Transformation</div>
+    </section>
+
+    <div class="captions" id="cap"><b></b></div>
+
+    <div class="brandmark">
+      <span class="sq">AF</span><span>Dr. Ali Fathy Alsherif</span>
+    </div>
+
+    <div class="poster" id="poster">
+      <button class="playbtn" id="play" aria-label="Play introduction">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+      </button>
+      <div class="hint">60-second introduction · sound on</div>
+    </div>
+  </div>
+</div>
+
+<div class="controls">
+  <button class="btn" id="toggle">Play</button>
+  <button class="btn" id="restart">Restart</button>
+  <button class="btn" id="voBtn"    aria-pressed="true">Voice-over</button>
+  <button class="btn" id="musicBtn" aria-pressed="true">Music</button>
+  <button class="btn" id="capBtn"   aria-pressed="true">Captions</button>
+  <span class="tick" id="time">0:00 / 1:00</span>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ================= script — single source of truth for VO + captions ============ */
+  var DUR = 60000;
+  var SCENES = [
+    { start: 0, end: 8000,
+      vo: "Doctor Ali Fathy Alsherif. Library and Information Science expert, artificial intelligence trainer, and digital transformation consultant.",
+      caps: [
+        [400,  "Dr. Ali Fathy Alsherif"],
+        [3000, "Library & Information Science expert"],
+        [5300, "AI trainer · Digital transformation consultant"]
+      ] },
+    { start: 8000, end: 20000,
+      vo: "For over twenty years he has built modern, data-driven knowledge environments across leading academic and government institutions in the Emirates — from digital repositories and large-scale digitization to AI-enabled information services.",
+      caps: [
+        [300,  "For over twenty years he has built modern,"],
+        [3200, "data-driven knowledge environments across leading"],
+        [6000, "academic and government institutions in the Emirates —"],
+        [8600, "from digital repositories and large-scale digitization"],
+        [10400,"to AI-enabled information services."]
+      ] },
+    { start: 20000, end: 31000,
+      vo: "His expertise spans artificial intelligence and digital transformation, library automation, digital repositories, archives and preservation, metadata standards, research support, and prompt engineering for knowledge institutions.",
+      caps: [
+        [300,  "His expertise spans artificial intelligence"],
+        [2600, "and digital transformation, library automation,"],
+        [5200, "digital repositories, archives and preservation,"],
+        [7600, "metadata standards, research support,"],
+        [9200, "and prompt engineering for knowledge institutions."]
+      ] },
+    { start: 31000, end: 42000,
+      vo: "He delivers AI consulting, digital transformation strategy, repository development, and metadata governance — alongside professional training programmes, hands-on workshops, and capacity building for librarians and knowledge teams.",
+      caps: [
+        [300,  "He delivers AI consulting, digital transformation strategy,"],
+        [3200, "repository development, and metadata governance —"],
+        [5800, "alongside professional training programmes,"],
+        [7800, "hands-on workshops, and capacity building"],
+        [9600, "for librarians and knowledge teams."]
+      ] },
+    { start: 42000, end: 52000,
+      vo: "He is the author of three books, including Artificial Intelligence Prompt Engineering in Libraries and Archives, with more than fifteen published papers and a Sharjah Award for Library Literature.",
+      caps: [
+        [300,  "He is the author of three books, including"],
+        [2600, "“AI Prompt Engineering in Libraries & Archives”,"],
+        [5600, "with more than fifteen published papers"],
+        [7600, "and a Sharjah Award for Library Literature."]
+      ] },
+    { start: 52000, end: 60000,
+      vo: "Explore the full portfolio, connect, and let's build the future of knowledge together.",
+      caps: [
+        [400,  "Explore the full portfolio, connect,"],
+        [2900, "and let's build the future of knowledge together."],
+        [5600, "dralialsherif.github.io"]
+      ] }
+  ];
+
+  var $ = function (s) { return document.querySelector(s); };
+  var stage = $("#stage"), bar = $("#bar"), capBox = $("#cap"), capText = capBox.querySelector("b");
+  var sceneEls = Array.prototype.slice.call(document.querySelectorAll(".scene"));
+
+  /* ================= responsive scale — keeps a clean 16:9 recording area ========= */
+  function fit() {
+    var pad = 32, ctrl = 118;
+    var s = Math.min((innerWidth - pad) / 1280, (innerHeight - ctrl) / 720);
+    s = Math.min(s, 1.35);
+    stage.style.transform = "scale(" + s + ")";
+    stage.parentElement.style.width = (1280 * s) + "px";
+    stage.parentElement.style.height = (720 * s) + "px";
+  }
+  addEventListener("resize", fit); fit();
+
+  /* ================= knowledge-network canvas ==================================== */
+  var cv = $("#net"), cx = cv.getContext("2d"), nodes = [], pulses = [], dpr = 1;
+  function initNet() {
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    cv.width = 1280 * dpr; cv.height = 720 * dpr;
+    cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    nodes = [];
+    for (var i = 0; i < 78; i++) {
+      nodes.push({
+        x: Math.random() * 1280, y: Math.random() * 720,
+        vx: (Math.random() - .5) * .22, vy: (Math.random() - .5) * .22,
+        r: Math.random() * 1.8 + 1.1
+      });
+    }
+  }
+  initNet();
+
+  function drawNet(energy) {
+    cx.clearRect(0, 0, 1280, 720);
+    var i, j, a, b, d, LINK = 168;
+
+    for (i = 0; i < nodes.length; i++) {
+      a = nodes[i];
+      a.x += a.vx * (.6 + energy * .9); a.y += a.vy * (.6 + energy * .9);
+      if (a.x < -30) a.x = 1310; if (a.x > 1310) a.x = -30;
+      if (a.y < -30) a.y = 750;  if (a.y > 750)  a.y = -30;
+    }
+    for (i = 0; i < nodes.length; i++) {
+      a = nodes[i];
+      for (j = i + 1; j < nodes.length; j++) {
+        b = nodes[j];
+        var dx = a.x - b.x, dy = a.y - b.y;
+        d = Math.sqrt(dx * dx + dy * dy);
+        if (d < LINK) {
+          var o = (1 - d / LINK) * .3 * (.45 + energy * .55);
+          cx.strokeStyle = "rgba(150,170,255," + o.toFixed(3) + ")";
+          cx.lineWidth = .7;
+          cx.beginPath(); cx.moveTo(a.x, a.y); cx.lineTo(b.x, b.y); cx.stroke();
+        }
+      }
+    }
+    for (i = 0; i < nodes.length; i++) {
+      a = nodes[i];
+      cx.beginPath(); cx.arc(a.x, a.y, a.r, 0, 6.2832);
+      cx.fillStyle = i % 7 === 0 ? "rgba(103,232,249,.85)" : "rgba(178,190,255,.42)";
+      cx.fill();
+      if (i % 7 === 0) {
+        cx.beginPath(); cx.arc(a.x, a.y, a.r * 4.5, 0, 6.2832);
+        cx.fillStyle = "rgba(34,211,238,.055)"; cx.fill();
+      }
+    }
+    for (i = pulses.length - 1; i >= 0; i--) {
+      var p = pulses[i]; p.t += .014;
+      if (p.t >= 1) { pulses.splice(i, 1); continue; }
+      var n1 = nodes[p.a], n2 = nodes[p.b];
+      if (!n1 || !n2) { pulses.splice(i, 1); continue; }
+      var px = n1.x + (n2.x - n1.x) * p.t, py = n1.y + (n2.y - n1.y) * p.t;
+      cx.beginPath(); cx.arc(px, py, 2.6, 0, 6.2832);
+      cx.fillStyle = "rgba(167,139,250," + (1 - p.t).toFixed(2) + ")"; cx.fill();
+    }
+    if (Math.random() < .05 + energy * .07) {
+      var s1 = (Math.random() * nodes.length) | 0, s2 = (Math.random() * nodes.length) | 0;
+      if (s1 !== s2) pulses.push({ a: s1, b: s2, t: 0 });
+    }
+  }
+
+  /* ================= ambient music (Web Audio — no external assets) ============== */
+  var actx = null, master = null, musicOn = true, arpTimer = null, arpStep = 0;
+  var SCALE = [220.00, 246.94, 293.66, 329.63, 392.00, 440.00, 587.33];
+
+  function startMusic() {
+    if (!musicOn) return;
+    if (!actx) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      actx = new AC();
+      master = actx.createGain(); master.gain.value = 0; master.connect(actx.destination);
+
+      var filt = actx.createBiquadFilter();
+      filt.type = "lowpass"; filt.frequency.value = 760; filt.Q.value = 4;
+      filt.connect(master);
+
+      [110, 164.81, 220].forEach(function (f, k) {
+        var o = actx.createOscillator(), g = actx.createGain();
+        o.type = k === 2 ? "triangle" : "sine";
+        o.frequency.value = f; o.detune.value = (k - 1) * 7;
+        g.gain.value = [0.16, 0.10, 0.055][k];
+        o.connect(g); g.connect(filt); o.start();
+      });
+
+      var lfo = actx.createOscillator(), lg = actx.createGain();
+      lfo.frequency.value = 0.055; lg.gain.value = 340;
+      lfo.connect(lg); lg.connect(filt.frequency); lfo.start();
+    }
+    if (actx.state === "suspended") actx.resume();
+    master.gain.cancelScheduledValues(actx.currentTime);
+    master.gain.setTargetAtTime(0.075, actx.currentTime, 1.2);
+
+    clearInterval(arpTimer);
+    arpTimer = setInterval(function () {
+      if (!actx || !musicOn || !playing) return;
+      var f = SCALE[arpStep % SCALE.length] * (arpStep % 9 === 0 ? 2 : 1);
+      arpStep++;
+      var o = actx.createOscillator(), g = actx.createGain(), t = actx.currentTime;
+      o.type = "sine"; o.frequency.value = f;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.05, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 2.1);
+      o.connect(g); g.connect(master); o.start(t); o.stop(t + 2.2);
+    }, 1900);
+  }
+  function fadeMusic() {
+    if (actx && master) master.gain.setTargetAtTime(0.0001, actx.currentTime, 0.5);
+    clearInterval(arpTimer);
+  }
+
+  /* ================= voice-over (Web Speech API) ================================= */
+  var voOn = true, synth = window.speechSynthesis, voice = null;
+  function pickVoice() {
+    if (!synth) return;
+    var v = synth.getVoices().filter(function (x) { return /^en(-|_)?/i.test(x.lang); });
+    if (!v.length) return;
+    var pref = v.find(function (x) { return /natural|google|aria|guy|jenny|ryan/i.test(x.name); });
+    voice = pref || v[0];
+  }
+  if (synth) { pickVoice(); synth.onvoiceschanged = pickVoice; }
+
+  function speak(text) {
+    if (!voOn || !synth) return;
+    try {
+      var u = new SpeechSynthesisUtterance(text);
+      if (voice) { u.voice = voice; u.lang = voice.lang; } else { u.lang = "en-US"; }
+      u.rate = 0.97; u.pitch = 1.0; u.volume = 1.0;
+      synth.speak(u);
+    } catch (e) { /* speech unsupported — captions still carry the message */ }
+  }
+
+  /* ================= counters ==================================================== */
+  function runCounters(el) {
+    el.querySelectorAll("[data-count]").forEach(function (n) {
+      if (n.dataset.done) return;
+      n.dataset.done = "1";
+      var to = +n.dataset.count, sfx = n.dataset.suffix || "", t0 = performance.now(), D = 1400;
+      (function step(now) {
+        var p = Math.min(1, (now - t0) / D);
+        var e = 1 - Math.pow(1 - p, 3);
+        n.textContent = Math.round(to * e) + (p === 1 ? sfx : "");
+        if (p < 1) requestAnimationFrame(step);
+      })(t0);
+    });
+  }
+  function resetCounters() {
+    document.querySelectorAll("[data-count]").forEach(function (n) {
+      n.dataset.done = ""; n.textContent = "0";
+    });
+  }
+
+  /* ================= timeline ==================================================== */
+  var playing = false, t0 = 0, elapsed = 0, cur = -1, capIdx = -1, raf = 0;
+
+  function setScene(i) {
+    if (i === cur) return;
+    cur = i;
+    sceneEls.forEach(function (el, k) { el.classList.toggle("on", k === i); });
+    capIdx = -1;
+    if (i >= 0) {
+      if (playing) speak(SCENES[i].vo);
+      if (i === 1) runCounters(sceneEls[1]);
+    }
+  }
+
+  function setCap(text) {
+    if (text === null) { capBox.classList.remove("show"); return; }
+    capText.textContent = text;
+    capBox.classList.add("show");
+  }
+
+  function fmt(ms) {
+    var s = Math.max(0, Math.round(ms / 1000));
+    return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+  }
+
+  function render() {
+    var e = Math.min(elapsed, DUR);
+
+    var idx = -1;
+    for (var i = 0; i < SCENES.length; i++) {
+      if (e >= SCENES[i].start && e < SCENES[i].end) { idx = i; break; }
+    }
+    if (e >= DUR) idx = SCENES.length - 1;
+    setScene(idx);
+
+    if (idx >= 0) {
+      var sc = SCENES[idx], rel = e - sc.start, want = -1;
+      for (var c = 0; c < sc.caps.length; c++) if (rel >= sc.caps[c][0]) want = c;
+      if (want !== capIdx) { capIdx = want; setCap(want < 0 ? null : sc.caps[want][1]); }
+    }
+
+    bar.style.width = (e / DUR * 100) + "%";
+    $("#time").textContent = fmt(e) + " / 1:00";
+
+    var energy = idx < 0 ? .2 : (idx === 0 || idx === 5 ? .85 : .5);
+    drawNet(energy);
+  }
+
+  function frame(now) {
+    if (playing) elapsed = now - t0;
+    render();
+    if (playing && elapsed >= DUR) { pause(true); }
+    raf = requestAnimationFrame(frame);
+  }
+
+  function play() {
+    if (elapsed >= DUR) { reset(); }
+    playing = true;
+    t0 = performance.now() - elapsed;
+    stage.classList.add("playing");
+    $("#toggle").textContent = "Pause";
+    startMusic();
+    if (cur >= 0 && synth && voOn && !synth.speaking) speak(SCENES[cur].vo);
+  }
+  function pause(ended) {
+    playing = false;
+    $("#toggle").textContent = ended ? "Replay" : "Play";
+    if (synth) synth.cancel();
+    fadeMusic();
+    if (ended) stage.classList.remove("playing");
+  }
+  function reset() {
+    elapsed = 0; cur = -1; capIdx = -1;
+    sceneEls.forEach(function (el) { el.classList.remove("on"); });
+    setCap(null); resetCounters(); bar.style.width = "0%";
+    if (synth) synth.cancel();
+  }
+
+  $("#play").addEventListener("click", play);
+  $("#toggle").addEventListener("click", function () { playing ? pause(false) : play(); });
+  $("#restart").addEventListener("click", function () { reset(); play(); });
+
+  function toggleBtn(id, fn) {
+    var b = $(id);
+    b.addEventListener("click", function () {
+      var on = b.getAttribute("aria-pressed") !== "true";
+      b.setAttribute("aria-pressed", String(on));
+      fn(on);
+    });
+  }
+  toggleBtn("#voBtn", function (on) {
+    voOn = on;
+    if (!on && synth) synth.cancel();
+    else if (on && playing && cur >= 0) speak(SCENES[cur].vo);
+  });
+  toggleBtn("#musicBtn", function (on) {
+    musicOn = on;
+    on && playing ? startMusic() : fadeMusic();
+  });
+  toggleBtn("#capBtn", function (on) { stage.classList.toggle("nocaps", !on); });
+
+  addEventListener("keydown", function (ev) {
+    if (ev.code === "Space") { ev.preventDefault(); playing ? pause(false) : play(); }
+    if (ev.key === "r" || ev.key === "R") { reset(); play(); }
+  });
+  addEventListener("beforeunload", function () { if (synth) synth.cancel(); });
+
+  /* Hidden tabs freeze requestAnimationFrame while speech keeps running, which would
+     desync the voice-over from the captions. Pause on hide, resume on return. */
+  var resumeOnShow = false;
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) {
+      if (playing) { resumeOnShow = true; pause(false); }
+    } else if (resumeOnShow) {
+      resumeOnShow = false; play();
+    }
+  });
+
+  /* ================= embed mode + external control API =========================== */
+  if (/[?&]embed=1/.test(location.search)) document.body.classList.add("embed");
+
+  // If audio was blocked by autoplay policy, resume it on the first interaction.
+  function armSoundFallback() {
+    if (!actx || actx.state !== "suspended") return;
+    var go = function () {
+      if (actx) actx.resume();
+      if (playing && voOn && cur >= 0 && synth && !synth.speaking) speak(SCENES[cur].vo);
+      removeEventListener("pointerdown", go); removeEventListener("keydown", go);
+    };
+    addEventListener("pointerdown", go); addEventListener("keydown", go);
+  }
+
+  var API = {
+    play: function () { play(); armSoundFallback(); },
+    pause: function () { pause(false); },
+    restart: function () { reset(); play(); armSoundFallback(); },
+    stop: function () { pause(false); reset(); },
+    seek: function (ms) {
+      elapsed = Math.max(0, Math.min(DUR, +ms || 0));
+      t0 = performance.now() - elapsed;
+      render();                       // repaint immediately, even while paused
+    },
+    isPlaying: function () { return playing; }
+  };
+  window.IntroVideo = API;
+
+  addEventListener("message", function (ev) {
+    var d = ev.data;
+    if (!d || d.intro == null) return;
+    if (typeof API[d.intro] === "function") API[d.intro](d.value);
+  });
+
+  raf = requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

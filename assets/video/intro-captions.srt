@@ -1,0 +1,99 @@
+1
+00:00:00,400 --> 00:00:03,000
+Dr. Ali Fathy Alsherif
+
+2
+00:00:03,000 --> 00:00:05,300
+Library & Information Science expert
+
+3
+00:00:05,300 --> 00:00:08,000
+AI trainer · Digital transformation consultant
+
+4
+00:00:08,300 --> 00:00:11,200
+For over twenty years he has built modern,
+
+5
+00:00:11,200 --> 00:00:14,000
+data-driven knowledge environments across leading
+
+6
+00:00:14,000 --> 00:00:16,600
+academic and government institutions in the Emirates —
+
+7
+00:00:16,600 --> 00:00:18,400
+from digital repositories and large-scale digitization
+
+8
+00:00:18,400 --> 00:00:20,000
+to AI-enabled information services.
+
+9
+00:00:20,300 --> 00:00:22,600
+His expertise spans artificial intelligence
+
+10
+00:00:22,600 --> 00:00:25,200
+and digital transformation, library automation,
+
+11
+00:00:25,200 --> 00:00:27,600
+digital repositories, archives and preservation,
+
+12
+00:00:27,600 --> 00:00:29,200
+metadata standards, research support,
+
+13
+00:00:29,200 --> 00:00:31,000
+and prompt engineering for knowledge institutions.
+
+14
+00:00:31,300 --> 00:00:34,200
+He delivers AI consulting, digital transformation strategy,
+
+15
+00:00:34,200 --> 00:00:36,800
+repository development, and metadata governance —
+
+16
+00:00:36,800 --> 00:00:38,800
+alongside professional training programmes,
+
+17
+00:00:38,800 --> 00:00:40,600
+hands-on workshops, and capacity building
+
+18
+00:00:40,600 --> 00:00:42,000
+for librarians and knowledge teams.
+
+19
+00:00:42,300 --> 00:00:44,600
+He is the author of three books, including
+
+20
+00:00:44,600 --> 00:00:47,600
+"AI Prompt Engineering in Libraries & Archives",
+
+21
+00:00:47,600 --> 00:00:49,600
+with more than fifteen published papers
+
+22
+00:00:49,600 --> 00:00:52,000
+and a Sharjah Award for Library Literature.
+
+23
+00:00:52,400 --> 00:00:54,900
+Explore the full portfolio, connect,
+
+24
+00:00:54,900 --> 00:00:57,600
+and let's build the future of knowledge together.
+
+25
+00:00:57,600 --> 00:01:00,000
+dralialsherif.github.io
