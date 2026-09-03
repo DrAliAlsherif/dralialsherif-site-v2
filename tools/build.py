@@ -38,13 +38,13 @@ def build_ar():
     out = out.replace('<meta property="og:locale" content="en_US" />',
                       '<meta property="og:locale" content="ar_AE" />', 1)
 
-    # 4. force Arabic before main.js runs
-    out = out.replace(
-        '<script src="../assets/js/main.js?v=33"></script>',
-        '<script>try{localStorage.setItem("af-lang","ar")}catch(e){}</script>\n'
-        '<script src="../assets/js/main.js?v=33"></script>',
-        1,
+    # 4. force Arabic before main.js runs (version-agnostic)
+    out, n = re.subn(
+        r'(<script src="\.\./assets/js/main\.js[^"]*"></script>)',
+        r'<script>try{localStorage.setItem("af-lang","ar")}catch(e){}</script>\n\1',
+        out, count=1,
     )
+    assert n == 1, "could not find main.js <script> tag to inject the af-lang setter"
 
     # 5. mark as generated
     out = out.replace("<head>",

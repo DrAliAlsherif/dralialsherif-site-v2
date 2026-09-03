@@ -1200,6 +1200,11 @@
     $$("[data-i18n-placeholder]").forEach((el) => {
       el.setAttribute("placeholder", t(el.getAttribute("data-i18n-placeholder")));
     });
+    $$("[data-i18n-title]").forEach((el) => {
+      const v = t(el.getAttribute("data-i18n-title"));
+      el.setAttribute("title", v);
+      el.setAttribute("aria-label", v);
+    });
     const yr = $("#year"); if (yr) yr.textContent = new Date().getFullYear();
     $("#langLabel").textContent = lang === "ar" ? "EN" : "ع";
     document.title = lang === "ar"

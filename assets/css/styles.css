@@ -116,15 +116,15 @@ h1,h2,h3,h4{font-family:var(--ff-head);line-height:1.15;margin:0;font-weight:700
 .brand-name{font-family:var(--ff-head);font-weight:700;font-size:.98rem}
 .brand-role{font-size:.72rem;color:var(--text-mute);letter-spacing:.02em}
 
-.main-nav{display:flex;gap:.3rem}
-.main-nav a{font-size:.9rem;font-weight:500;color:var(--text-soft);padding:.5em .8em;border-radius:10px;
-  position:relative;transition:color .25s,background .25s}
+.main-nav{display:flex;gap:.15rem;flex-shrink:0}
+.main-nav a{font-size:.86rem;font-weight:500;color:var(--text-soft);padding:.5em .62em;border-radius:10px;
+  position:relative;white-space:nowrap;transition:color .25s,background .25s}
 .main-nav a:hover{color:var(--text);background:var(--surface-2)}
 .main-nav a.active{color:var(--brand)}
 .main-nav a.active::after{content:"";position:absolute;left:50%;bottom:4px;transform:translateX(-50%);
   width:5px;height:5px;border-radius:50%;background:var(--brand)}
 
-.nav-actions{display:flex;align-items:center;gap:.4rem}
+.nav-actions{display:flex;align-items:center;gap:.4rem;flex-shrink:0}
 .icon-btn{display:grid;place-items:center;width:40px;height:40px;border-radius:11px;border:1px solid var(--border);
   background:var(--surface);color:var(--text);cursor:pointer;transition:all .25s var(--ease);font-weight:600}
 .icon-btn:hover{border-color:var(--brand);color:var(--brand);transform:translateY(-1px)}
@@ -622,15 +622,21 @@ html[data-theme="dark"] .ci-icon{background:rgba(124,92,255,.14)}
   .gallery-grid{grid-template-columns:repeat(3,1fr)}
   .about-facts{position:static}
 }
-@media (max-width:900px){
-  .main-nav{position:fixed;inset-block-start:72px;inset-inline-end:0;height:calc(100dvh - 72px);width:min(80vw,320px);
+/* Collapse the primary nav into the slide-in menu below this width — with 9
+   top-level links a horizontal bar would otherwise crowd out the nav actions
+   (search / language / theme). */
+@media (max-width:1120px){
+  .main-nav{position:fixed;inset-block-start:72px;inset-inline-end:0;height:calc(100dvh - 72px);width:min(82vw,320px);
     flex-direction:column;gap:.2rem;background:var(--surface);border-inline-start:1px solid var(--border);
-    padding:1.4rem;transform:translateX(100%);transition:transform .35s var(--ease);box-shadow:var(--shadow-lg)}
+    padding:1.4rem;transform:translateX(100%);transition:transform .35s var(--ease);box-shadow:var(--shadow-lg);
+    overflow-y:auto}
   html[dir="rtl"] .main-nav{transform:translateX(-100%)}
   .main-nav.open{transform:none}
-  .main-nav a{padding:.9em 1rem;font-size:1rem;border-radius:12px}
+  .main-nav a{padding:.9em 1rem;font-size:1rem;border-radius:12px;white-space:normal}
   .menu-toggle{display:flex}
   .nav-cv{display:none}
+}
+@media (max-width:900px){
   .hero-inner{grid-template-columns:1fr;text-align:center}
   .hero-content{order:2}
   .hero-portrait{order:1}
@@ -648,9 +654,16 @@ html[data-theme="dark"] .ci-icon{background:rgba(124,92,255,.14)}
   .book-cover{width:96px}
   .footer-inner{flex-direction:column}
   .lb-nav{width:42px;height:42px}
+  /* Tighten the header so the search / language / theme / menu buttons
+     always fit next to the brand on small screens. */
+  .nav-inner{gap:.5rem}
+  .nav-actions{gap:.25rem}
+  .brand-role{display:none}
+}
+@media (max-width:430px){
+  .brand-name{display:none}
 }
 @media (max-width:400px){
-  .brand-role{display:none}
   .gallery-grid{grid-template-columns:repeat(2,1fr)}
 }
 
@@ -658,13 +671,15 @@ html[data-theme="dark"] .ci-icon{background:rgba(124,92,255,.14)}
    v2 additions — SEO index, articles, partners, impact, form
    ========================================================= */
 
-/* Static crawlable summary: present in the DOM, out of the visual flow */
+/* Static crawlable summary: present in the DOM, out of the visual flow.
+   Uses the standard clip pattern — never left:-9999px, which would add
+   ~10000px of horizontal page overflow. */
 .seo-index{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
-  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);border:0}
 
-/* Honeypot field for the contact form (Web3Forms botcheck) */
-.hp-field{position:absolute!important;left:-9999px!important;width:1px;height:1px;
-  opacity:0;pointer-events:none}
+/* Honeypot field for the contact form (Web3Forms botcheck) — fully removed
+   from layout so it cannot affect page width. */
+.hp-field{display:none!important}
 
 /* Small section-level call to action under a grid */
 .section-cta{margin-top:1.6rem;text-align:center}
