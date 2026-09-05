@@ -1127,13 +1127,16 @@
     // Partners strip
     const ps = $("#partnersStrip");
     if (ps) {
+      const d = (i) => `style="transition-delay:${(i % 10) * 55}ms"`;
       if (DATA.partners && DATA.partners.length) {
-        ps.innerHTML = DATA.partners.map((p) => {
+        ps.innerHTML = DATA.partners.map((p, i) => {
           const img = `<img src="${p.img}" alt="${p.name}" loading="lazy" />`;
-          return p.url ? `<a href="${p.url}" target="_blank" rel="noopener noreferrer">${img}</a>` : img;
+          const inner = p.url ? `<a href="${p.url}" target="_blank" rel="noopener noreferrer">${img}</a>` : img;
+          return `<span class="reveal reveal-scale" ${d(i)}>${inner}</span>`;
         }).join("");
       } else {
-        ps.innerHTML = PARTNER_FALLBACK.map((n) => `<span>${n[lang]}</span>`).join("");
+        ps.innerHTML = PARTNER_FALLBACK.map((n, i) =>
+          `<span class="reveal reveal-scale" ${d(i)}>${n[lang]}</span>`).join("");
       }
     }
 
@@ -1244,23 +1247,28 @@
         });
       }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
     }
-    $$(".reveal:not(.in)").forEach((el) => revealObserver.observe(el));
+    $$(".reveal:not(.in), .reveal-scale:not(.in)").forEach((el) => revealObserver.observe(el));
   }
 
   /* ---------------- Counters ---------------- */
+  const _reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   function animateCounters() {
     $$("[data-count]").forEach((el) => {
       const target = +el.dataset.count;
       const suffix = el.dataset.suffix || "";
-      let cur = 0;
-      const step = Math.max(1, Math.ceil(target / 40));
-      const tick = () => {
-        cur += step;
-        if (cur >= target) { el.textContent = target + suffix; }
-        else { el.textContent = cur + suffix; requestAnimationFrame(tick); }
+      if (_reduceMotion) { el.textContent = target + suffix; return; }
+      const dur = 1100 + Math.min(target, 400);   // longer count-up for bigger numbers
+      let startTs = 0;
+      const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+      const tick = (ts) => {
+        if (!startTs) startTs = ts;
+        const p = Math.min(1, (ts - startTs) / dur);
+        el.textContent = Math.round(target * easeOut(p)) + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = target + suffix;
       };
       const io = new IntersectionObserver((ents) => {
-        ents.forEach((e) => { if (e.isIntersecting) { tick(); io.disconnect(); } });
+        ents.forEach((e) => { if (e.isIntersecting) { requestAnimationFrame(tick); io.disconnect(); } });
       }, { threshold: 0.5 });
       io.observe(el);
     });

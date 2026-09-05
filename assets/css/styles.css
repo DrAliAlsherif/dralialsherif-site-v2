@@ -713,3 +713,70 @@ html[lang="ar"] .section-cta{font-family:var(--ff-ar)}
   color:var(--brand);line-height:1}
 .impact-row span{font-size:.76rem;color:var(--text-mute)}
 @media (max-width:640px){.impact-row{grid-template-columns:1fr 1fr}}
+
+/* =========================================================
+   v2 — Motion pass
+   Tasteful, GPU-friendly, and fully disabled when the visitor
+   asks for reduced motion (block at the very end of this file).
+   ========================================================= */
+
+/* Reveal — perf hint + a scale-in variant (translate-free, so it can never
+   nudge the page into horizontal overflow on a wide/RTL layout). */
+.reveal{will-change:opacity,transform}
+.reveal.in{will-change:auto}
+.reveal-scale{opacity:0;transform:scale(.94);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.reveal-scale.in{opacity:1;transform:none}
+
+/* Anchor targets clear the fixed header on smooth-scroll ------------------- */
+section[id]{scroll-margin-top:90px}
+
+/* Hero — living gradient on the surname + job line ------------------------- */
+@keyframes gradShift{to{background-position:200% center}}
+.grad-text,.hero-job{background-size:220% auto;animation:gradShift 9s linear infinite}
+
+/* Section title — accent bar draws in with the heading -------------------- */
+.section-title{position:relative;display:inline-block;padding-bottom:.55rem}
+.section-title::after{content:"";position:absolute;inset-inline-start:0;bottom:0;height:3px;width:56px;
+  border-radius:3px;background:var(--brand-grad);transform-origin:inline-start;transform:scaleX(0);
+  transition:transform .55s var(--ease) .18s}
+.section-head.in .section-title::after{transform:scaleX(1)}
+
+/* Primary nav — underline wipes in on hover / keyboard focus ------------- */
+.main-nav a::before{content:"";position:absolute;inset-inline:.62em;bottom:5px;height:2px;border-radius:2px;
+  background:var(--brand-grad);transform:scaleX(0);transform-origin:center;transition:transform .28s var(--ease)}
+.main-nav a:hover::before,.main-nav a:focus-visible::before{transform:scaleX(1)}
+
+/* Primary button — soft light sweep on hover ----------------------------- */
+.btn-primary{position:relative;overflow:hidden;isolation:isolate}
+.btn-primary::after{content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(115deg,transparent 34%,rgba(255,255,255,.38) 50%,transparent 66%);
+  transform:translateX(-130%);transition:transform .6s var(--ease)}
+.btn-primary:hover::after{transform:translateX(130%)}
+
+/* Press feedback -------------------------------------------------------- */
+.btn:active{transform:translateY(0) scale(.97)}
+.icon-btn:active{transform:scale(.92)}
+
+/* Marquee holds still while pointed at --------------------------------- */
+.marquee:hover .marquee-track,.marquee:focus-within .marquee-track{animation-play-state:paused}
+
+/* Lightbox / video modal — fade the veil, pop the content ------------- */
+.lightbox,.video-modal{opacity:0;transition:opacity .3s var(--ease)}
+.lightbox.open,.video-modal.open{opacity:1}
+@keyframes popIn{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
+.lightbox.open .lb-figure,.video-modal.open .video-modal-inner{animation:popIn .4s var(--ease) both}
+
+/* Scroll progress bar — take the edge off the jump ------------------- */
+.scroll-progress{transition:width .12s linear}
+
+/* Back-to-top — nudge on hover ------------------------------------- */
+.to-top.show:hover{transform:translateY(-4px) scale(1.04)}
+
+@media (prefers-reduced-motion:reduce){
+  .grad-text,.hero-job,.marquee-track{animation:none!important;background-position:0 0!important}
+  .reveal-scale{opacity:1!important;transform:none!important;transition:none}
+  .section-title::after{transition:none;transform:scaleX(1)}
+  .main-nav a::before,.btn-primary::after{transition:none}
+  .lightbox.open .lb-figure,.video-modal.open .video-modal-inner{animation:none}
+  .to-top.show:hover{transform:none}
+}

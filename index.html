@@ -57,7 +57,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-<link rel="stylesheet" href="assets/css/styles.css?v=21" />
+<link rel="stylesheet" href="assets/css/styles.css?v=24" />
 
 <!-- Structured Data -->
 <script type="application/ld+json">
@@ -166,16 +166,16 @@
 
   <div class="container hero-inner">
     <div class="hero-content">
-      <span class="eyebrow reveal" data-i18n="hero.eyebrow">Dubai, United Arab Emirates · Golden Visa Holder</span>
-      <h1 class="hero-title reveal">
+      <span class="eyebrow reveal" style="transition-delay:.08s" data-i18n="hero.eyebrow">Dubai, United Arab Emirates · Golden Visa Holder</span>
+      <h1 class="hero-title reveal" style="transition-delay:.16s">
         <span data-i18n="hero.hello">Dr. Ali Fathy</span>
         <span class="grad-text" data-i18n="hero.name">Alsherif</span>
       </h1>
-      <p class="hero-job reveal" data-i18n="hero.job">Smart Systems &amp; Digital Transformation Consultant</p>
-      <p class="hero-roles reveal" data-i18n="hero.roles">Academic Lecturer · Researcher · International Trainer &amp; Speaker</p>
-      <p class="hero-bio reveal" data-i18n="hero.bio">Two decades building modern, data-driven knowledge environments across leading academic and governmental institutions in the UAE — from digital repositories and large-scale digitization to AI-enabled information services.</p>
+      <p class="hero-job reveal" style="transition-delay:.26s" data-i18n="hero.job">Smart Systems &amp; Digital Transformation Consultant</p>
+      <p class="hero-roles reveal" style="transition-delay:.34s" data-i18n="hero.roles">Academic Lecturer · Researcher · International Trainer &amp; Speaker</p>
+      <p class="hero-bio reveal" style="transition-delay:.42s" data-i18n="hero.bio">Two decades building modern, data-driven knowledge environments across leading academic and governmental institutions in the UAE — from digital repositories and large-scale digitization to AI-enabled information services.</p>
 
-      <div class="hero-cta reveal">
+      <div class="hero-cta reveal" style="transition-delay:.5s">
         <a href="assets/docs/Ali-Fathy-CV.pdf" download class="btn btn-primary">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
           <span data-i18n="cta.cv">Download CV</span>
@@ -188,7 +188,7 @@
         <a href="#contact" class="btn btn-ghost" data-i18n="cta.speak">Invite to Speak</a>
       </div>
 
-      <ul class="hero-stats reveal" aria-label="Key figures">
+      <ul class="hero-stats reveal" style="transition-delay:.58s" aria-label="Key figures">
         <li><strong data-count="23">23</strong><span data-i18n="stat.years">Years experience</span></li>
         <li><strong data-count="3">3</strong><span data-i18n="stat.books">Books published</span></li>
         <li><strong data-count="15" data-suffix="+">15+</strong><span data-i18n="stat.pubs">Publications</span></li>
@@ -196,7 +196,7 @@
       </ul>
     </div>
 
-    <div class="hero-portrait reveal">
+    <div class="hero-portrait reveal reveal-scale" style="transition-delay:.3s">
       <div class="portrait-frame">
         <img src="assets/img/hero-portrait.jpg?v=17" alt="Portrait of Dr. Ali Fathy Alsherif" width="440" height="520" fetchpriority="high" />
         <div class="portrait-badge">
@@ -235,7 +235,7 @@
         </div>
       </div>
 
-      <aside class="about-facts reveal">
+      <aside class="about-facts reveal" style="transition-delay:.1s">
         <h3 data-i18n="about.facts.title">At a glance</h3>
         <ul class="fact-list">
           <li><span data-i18n="about.fact.based">Based in</span><strong>Dubai, UAE</strong></li>
@@ -406,12 +406,12 @@
          assets/img/partners/ and list them in DATA.partners in main.js
          (name + file + optional url). Until then this shows text chips. -->
     <div class="partners-strip" id="partnersStrip"></div>
-    <ul class="impact-row reveal" aria-label="Impact figures">
+    <ul class="impact-row" aria-label="Impact figures">
       <!-- TODO(impact): confirm real totals, then update these numbers + labels. -->
-      <li><strong data-count="18" data-suffix="+">18+</strong><span data-i18n="impact.workshops">Workshops delivered</span></li>
-      <li><strong data-count="500" data-suffix="+">500+</strong><span data-i18n="impact.trained">Professionals trained</span></li>
-      <li><strong data-count="15" data-suffix="+">15+</strong><span data-i18n="impact.institutions">Institutions served</span></li>
-      <li><strong data-count="20" data-suffix="+">20+</strong><span data-i18n="impact.talks">Conference talks</span></li>
+      <li class="reveal reveal-scale"><strong data-count="18" data-suffix="+">18+</strong><span data-i18n="impact.workshops">Workshops delivered</span></li>
+      <li class="reveal reveal-scale" style="transition-delay:.08s"><strong data-count="500" data-suffix="+">500+</strong><span data-i18n="impact.trained">Professionals trained</span></li>
+      <li class="reveal reveal-scale" style="transition-delay:.16s"><strong data-count="15" data-suffix="+">15+</strong><span data-i18n="impact.institutions">Institutions served</span></li>
+      <li class="reveal reveal-scale" style="transition-delay:.24s"><strong data-count="20" data-suffix="+">20+</strong><span data-i18n="impact.talks">Conference talks</span></li>
     </ul>
   </div>
 </section>
@@ -668,6 +668,6 @@
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5m0 0l-6 6m6-6l6 6"/></svg>
 </button>
 
-<script src="assets/js/main.js?v=34"></script>
+<script src="assets/js/main.js?v=36"></script>
 </body>
 </html>
