@@ -27,6 +27,7 @@ ships as plain static files.
 ├── media-kit.html             # Speaker / media kit
 ├── articles/                  # Blog: index.html + _template.html (add posts here)
 ├── workshops/                 # 14 GENERATED workshop briefs + index.html (tools/gen_workshops.py)
+├── expertise/                 # 10 GENERATED area pages + index.html (tools/gen_expertise.py)
 ├── assets/
 │   ├── css/styles.css         # Main design system: light/dark, RTL, responsive
 │   ├── css/subpage.css        # Shared styles for articles/ and media-kit.html
@@ -39,6 +40,7 @@ ships as plain static files.
 │       └── hero-portrait.jpg
 ├── tools/
 │   ├── gen_workshops.py       # → workshops/*.html + workshops/index.html
+│   ├── gen_expertise.py       # → expertise/*.html + expertise/index.html (+ concept art)
 │   ├── build.py               # → ar/index.html + sitemap lastmod
 │   └── optimize_images.py     # (re)compress assets/img + build icons
 ├── IMPROVEMENTS.md            # Change log + TODO tracker
@@ -49,7 +51,8 @@ ships as plain static files.
 
 ```bash
 python tools/gen_workshops.py   # after editing workshop content
-python tools/build.py           # after editing index.html (rebuilds ar/) — run gen_workshops first
+python tools/gen_expertise.py   # after editing expertise content / area services
+python tools/build.py           # after editing index.html (rebuilds ar/) — run the gen_* scripts first
 python tools/optimize_images.py # after adding images  (--dry-run to preview)
 ```
 

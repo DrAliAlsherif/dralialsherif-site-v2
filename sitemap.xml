@@ -21,8 +21,20 @@
   </url>
 
   <url><loc>https://dralialsherif.github.io/dralialsherif-site-v2/workshops/</loc><lastmod>2026-09-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://dralialsherif.github.io/dralialsherif-site-v2/expertise/</loc><lastmod>2026-09-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://dralialsherif.github.io/dralialsherif-site-v2/media-kit.html</loc><lastmod>2026-09-05</lastmod><changefreq>yearly</changefreq><priority>0.6</priority></url>
   <url><loc>https://dralialsherif.github.io/dralialsherif-site-v2/articles/</loc><lastmod>2026-09-05</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+
+  <url><loc>https://dralialsherif.github.io/dralialsherif-site-v2/expertise/academic-libraries.html</loc><lastmod>2026-09-05</lastmod><priority>0.7</priority></url>
+  <url><loc>https://dralialsherif.github.io/dralialsherif-site-v2/expertise/digital-repositories.html</loc><lastmod>2026-09-05</lastmod><priority>0.7</priority></url>
+  <url><loc>https://dralialsherif.github.io/dralialsherif-site-v2/expertise/archives-preservation.html</loc><lastmod>2026-09-05</lastmod><priority>0.7</priority></url>
+  <url><loc>https://dralialsherif.github.io/dralialsherif-site-v2/expertise/knowledge-management.html</loc><lastmod>2026-09-05</lastmod><priority>0.7</priority></url>
+  <url><loc>https://dralialsherif.github.io/dralialsherif-site-v2/expertise/artificial-intelligence.html</loc><lastmod>2026-09-05</lastmod><priority>0.7</priority></url>
+  <url><loc>https://dralialsherif.github.io/dralialsherif-site-v2/expertise/digital-transformation.html</loc><lastmod>2026-09-05</lastmod><priority>0.7</priority></url>
+  <url><loc>https://dralialsherif.github.io/dralialsherif-site-v2/expertise/metadata-standards.html</loc><lastmod>2026-09-05</lastmod><priority>0.7</priority></url>
+  <url><loc>https://dralialsherif.github.io/dralialsherif-site-v2/expertise/research-support.html</loc><lastmod>2026-09-05</lastmod><priority>0.7</priority></url>
+  <url><loc>https://dralialsherif.github.io/dralialsherif-site-v2/expertise/training-capacity.html</loc><lastmod>2026-09-05</lastmod><priority>0.7</priority></url>
+  <url><loc>https://dralialsherif.github.io/dralialsherif-site-v2/expertise/consulting.html</loc><lastmod>2026-09-05</lastmod><priority>0.7</priority></url>
 
   <url><loc>https://dralialsherif.github.io/dralialsherif-site-v2/workshops/smart-event-management-ai.html</loc><lastmod>2026-09-05</lastmod><priority>0.7</priority></url>
   <url><loc>https://dralialsherif.github.io/dralialsherif-site-v2/workshops/institutional-innovation-ai.html</loc><lastmod>2026-09-05</lastmod><priority>0.7</priority></url>

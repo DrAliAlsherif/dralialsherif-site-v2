@@ -140,3 +140,33 @@ svg{width:1.1em;height:1.1em;fill:none;stroke:currentColor;stroke-width:2;
 .wsp-footer a:hover{color:var(--brand)}
 
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---------- Concept illustration panel (expertise pages) ---------- */
+.wsp-art{position:relative;overflow:hidden;border-radius:var(--radius-sm);
+  aspect-ratio:16/6.2;margin:0 0 1.8rem;border:1px solid var(--border);
+  background:
+    radial-gradient(120% 130% at 10% -12%,rgba(124,92,255,.44),transparent 56%),
+    radial-gradient(120% 130% at 110% 122%,rgba(34,211,238,.34),transparent 56%),
+    linear-gradient(135deg,#0b1024,#0a1a33)}
+.wsp-art::after{content:"";position:absolute;inset:0;opacity:.55;pointer-events:none;
+  background-image:radial-gradient(rgba(200,214,255,.16) 1px,transparent 1.5px);background-size:15px 15px;
+  -webkit-mask-image:linear-gradient(180deg,#000,transparent);mask-image:linear-gradient(180deg,#000,transparent)}
+.wsp-art .ra{position:relative;width:100%;height:100%;display:block}
+.wsp-art .ra-edge{stroke:rgba(190,205,255,.30);stroke-width:1.1;fill:none}
+.wsp-art .ra-stroke{fill:none;stroke:rgba(228,234,255,.88);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.wsp-art .ra-dim{stroke:rgba(228,234,255,.42)}
+.wsp-art .ra-dim2{fill:none;stroke:rgba(228,234,255,.5);stroke-width:2;stroke-linecap:round}
+.wsp-art .ra-dim2b{fill:rgba(228,234,255,.5)}
+.wsp-art .ra-node{stroke:rgba(10,14,32,.35);stroke-width:1}
+.wsp-art .ra-node--a{fill:#22d3ee}
+.wsp-art .ra-node--b{fill:#a78bfa}
+.wsp-art .ra-accent{fill:#22d3ee}
+.wsp-art .ra-accent2{fill:#a78bfa}
+.wsp-art .ra-scan{fill:#22d3ee;opacity:.9}
+.wsp-art .ra-check{stroke:#22d3ee;stroke-width:3;fill:none}
+.wsp-art .ra-signal{fill:none;stroke:#22d3ee;stroke-width:2;stroke-linecap:round;opacity:.85}
+
+.wsp-related{display:flex;flex-wrap:wrap;gap:.5rem;margin:.4rem 0 0}
+.wsp-related a{font-size:.8rem;font-weight:600;color:var(--text-soft);
+  background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:.4em .8em;transition:.2s}
+.wsp-related a:hover{border-color:var(--brand);color:var(--brand)}
