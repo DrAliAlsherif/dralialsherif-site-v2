@@ -365,6 +365,7 @@
         publisher: "Dar Al Nahda Al Ilmiya, Dubai", publisherAr: "دار النهضة العلمية، دبي",
         cover: "المستودعات الرقمية", coverTitle: "AI Prompt Engineering",
         img: "assets/img/books/ai-prompt-engineering.jpg",
+        sample: "assets/books/ai-prompt-engineering-sample.pdf",
       },
       {
         color: "linear-gradient(150deg,#0f2b5b,#2563eb)", year: "2021",
@@ -377,6 +378,7 @@
         publisher: "Dar Al Nahda Al Ilmiya, Dubai", publisherAr: "دار النهضة العلمية، دبي",
         coverTitle: "Digital Repositories",
         img: "assets/img/books/digital-repositories.jpg",
+        sample: "assets/books/digital-repositories-sample.pdf",
       },
       {
         color: "linear-gradient(150deg,#7c3aed,#c026a3)", year: "2019",
@@ -389,6 +391,7 @@
         publisher: "Dar Al Nahda Al Ilmiya, Dubai", publisherAr: "دار النهضة العلمية، دبي",
         coverTitle: "Arab Heritage Digitization",
         img: "assets/img/books/arab-heritage-digitization.jpg",
+        sample: "assets/books/arab-heritage-digitization-sample.pdf",
       },
     ],
 
@@ -997,6 +1000,12 @@
             <span class="bc-imprint">Dar Al Nahda Al Ilmiya</span>
             <span class="bc-year">${x.year}</span>
           </div>`;
+      const read = x.sample
+        ? `<a class="book-read" href="books/viewer.html?src=${encodeURIComponent("../" + x.sample)}&amp;title=${encodeURIComponent(title)}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10 5 6.5 4.7 4 5.4V19c2.5-.7 6-.4 8 1.1 2-1.5 5.5-1.8 8-1.1V5.4C17.5 4.7 14 5 12 6.5Z"/><path d="M12 6.5v13.6"/></svg>
+            ${lang === "ar" ? "تصفّح مقدمة الكتاب" : "Read the sample"}
+          </a>`
+        : "";
       return `<article class="book-card reveal">
         ${cover}
         <div class="book-info">
@@ -1006,6 +1015,7 @@
             <span>${ICONS.doc} <b>${lang === "ar" ? x.publisherAr : x.publisher}</b></span>
             <span>${lang === "ar" ? "سنة" : "Year"}: <b>${x.year}</b></span>
           </div>
+          ${read}
         </div></article>`;
     }).join("");
 

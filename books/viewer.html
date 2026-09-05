@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#05060f" />
+<meta name="robots" content="noindex, follow" />
+<title>تصفّح الكتاب — د. علي فتحي الشريف</title>
+<meta name="description" content="عارض يعرض مقدمة الكتاب ومحتوياته على شكل كتاب قابل للتقليب." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%234f46e5'/%3E%3Ctext x='50' y='68' font-size='54' font-family='Georgia,serif' font-weight='700' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#05060f; --panel:#0d1122; --panel-2:#141a30;
+    --text:#eef1ff; --soft:#aab2dd; --mute:#7d86b8;
+    --brand:#7c5cff; --brand-2:#22d3ee;
+    --grad:linear-gradient(120deg,#9b8bff,#5b8cff 46%,#2ee6ff);
+    --border:rgba(150,165,255,.16);
+    --ff:'IBM Plex Sans Arabic',system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:
+      radial-gradient(70% 60% at 15% 0%,rgba(124,92,255,.16),transparent 60%),
+      radial-gradient(60% 60% at 100% 100%,rgba(34,211,238,.12),transparent 60%),
+      var(--bg);
+    color:var(--text);font-family:var(--ff);display:flex;flex-direction:column;overflow:hidden}
+
+  /* top bar */
+  .bar{display:flex;align-items:center;gap:.8rem;padding:.7rem clamp(.8rem,3vw,1.4rem);
+    border-bottom:1px solid var(--border);background:rgba(8,10,22,.6);backdrop-filter:blur(10px);flex:none}
+  .bar .home{display:inline-flex;align-items:center;gap:.5rem;font-weight:700;color:var(--text);white-space:nowrap}
+  .bar .mark{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--grad);
+    color:#fff;font-weight:800;font-size:.85rem}
+  .bar .title{flex:1;min-width:0;font-size:.95rem;font-weight:600;color:var(--soft);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bar .acts{display:flex;gap:.4rem;flex:none}
+  .btn{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;border:1px solid var(--border);
+    background:var(--panel);color:var(--text);cursor:pointer;transition:.2s}
+  .btn:hover{border-color:var(--brand);color:#fff;background:var(--panel-2)}
+  .btn:disabled{opacity:.4;cursor:default}
+  .btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  a.btn{text-decoration:none}
+
+  /* stage */
+  .stage{flex:1;position:relative;display:grid;place-items:center;padding:clamp(.5rem,2vw,1.2rem);overflow:hidden}
+  .zoomwrap{transition:transform .25s var(--ease);transform-origin:center center;display:grid;place-items:center}
+  .flip{background:transparent}
+  .flip .stf__item{background:#fff}
+  .pg{width:100%;height:100%;background:#fff;display:grid;place-items:center;overflow:hidden}
+  .pg img{width:100%;height:100%;display:block;object-fit:contain;background:#fff}
+  .pg-load{width:26px;height:26px;border:3px solid #d8d8e4;border-top-color:#8a8ab5;
+    border-radius:50%;animation:spin 1s linear infinite}
+  .pg-skip{width:100%;height:100%;background:#fff;color:#555;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:.6rem;font-size:.9rem;text-align:center;padding:1rem}
+  .pg-skip a{color:#4f46e5;font-weight:700;text-decoration:none}
+
+  /* bottom controls */
+  .ctrls{flex:none;display:flex;align-items:center;justify-content:center;gap:.7rem;
+    padding:.7rem 1rem calc(.7rem + env(safe-area-inset-bottom));border-top:1px solid var(--border);
+    background:rgba(8,10,22,.6);backdrop-filter:blur(10px)}
+  .nav{display:inline-flex;align-items:center;gap:.4rem;border:1px solid var(--border);background:var(--panel);
+    color:var(--text);border-radius:999px;padding:.5rem 1.1rem;font-weight:600;font-size:.9rem;cursor:pointer;transition:.2s}
+  .nav:hover{border-color:var(--brand);background:var(--panel-2)}
+  .nav:disabled{opacity:.4;cursor:default}
+  .nav svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+  .counter{font-variant-numeric:tabular-nums;color:var(--soft);font-size:.9rem;min-width:5.5rem;text-align:center}
+  .counter b{color:var(--text)}
+
+  /* loading + error */
+  .overlay{position:absolute;inset:0;display:grid;place-items:center;background:rgba(5,6,15,.86);z-index:20;text-align:center;padding:2rem}
+  .overlay .box{max-width:22rem}
+  .spin{width:38px;height:38px;margin:0 auto 1rem;border:3px solid rgba(255,255,255,.15);border-top-color:var(--brand-2);
+    border-radius:50%;animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .prog{height:6px;border-radius:6px;background:rgba(255,255,255,.12);overflow:hidden;margin-top:1rem}
+  .prog i{display:block;height:100%;width:0;background:var(--grad);transition:width .2s}
+  .overlay p{color:var(--soft);font-size:.9rem;margin:.7rem 0 0}
+  .overlay .err-actions{margin-top:1.2rem;display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
+  .overlay .err-actions a{border:1px solid var(--border);border-radius:999px;padding:.5rem 1.1rem;color:var(--text);
+    text-decoration:none;font-weight:600;font-size:.88rem}
+  .hint{position:absolute;inset-block-end:14px;inset-inline:0;text-align:center;color:var(--mute);font-size:.78rem;
+    pointer-events:none;opacity:0;transition:opacity .4s;z-index:5}
+  .hint.show{opacity:1}
+  [hidden]{display:none!important}
+  @media (prefers-reduced-motion:reduce){.zoomwrap,.prog i{transition:none}.spin{animation-duration:2s}}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <a class="home" href="../index.html#books" aria-label="عودة إلى الموقع">
+    <span class="mark">AF</span>
+  </a>
+  <span class="title" id="bookTitle">تصفّح الكتاب</span>
+  <div class="acts">
+    <button class="btn" id="zoomOut" title="تصغير" aria-label="تصغير"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11h6"/></svg></button>
+    <button class="btn" id="zoomIn" title="تكبير" aria-label="تكبير"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg></button>
+    <button class="btn" id="fs" title="ملء الشاشة" aria-label="ملء الشاشة"><svg viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg></button>
+    <a class="btn" id="openPdf" title="فتح ملف PDF" aria-label="فتح ملف PDF" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M9 15h6M9 12h3"/></svg></a>
+  </div>
+</header>
+
+<main class="stage" id="stage">
+  <div class="zoomwrap" id="zoomwrap">
+    <div class="flip" id="flip" hidden></div>
+  </div>
+  <div class="hint" id="hint">اسحب حافة الصفحة أو استخدم الأزرار للتنقّل</div>
+
+  <div class="overlay" id="overlay">
+    <div class="box">
+      <div class="spin" id="spin"></div>
+      <div id="ovText">جارٍ تحضير الكتاب…</div>
+      <div class="prog" id="progWrap" hidden><i id="progBar"></i></div>
+      <p id="ovSub"></p>
+      <div class="err-actions" id="errActions" hidden></div>
+    </div>
+  </div>
+</main>
+
+<footer class="ctrls" id="ctrls" hidden>
+  <button class="nav" id="prev"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg><span>السابق</span></button>
+  <span class="counter"><b id="cur">1</b> / <span id="total">1</span></span>
+  <button class="nav" id="next"><span>التالي</span><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+</footer>
+
+<script src="../assets/vendor/pdfjs/pdf.min.js"></script>
+<script src="../assets/vendor/page-flip/page-flip.browser.js"></script>
+<script>
+(function () {
+  "use strict";
+  var qs = new URLSearchParams(location.search);
+  var src = qs.get("src") || "";
+  var title = qs.get("title") || "";
+  var $ = function (id) { return document.getElementById(id); };
+
+  if (title) { $("bookTitle").textContent = title; document.title = title + " — تصفّح الكتاب"; }
+  if (src) { $("openPdf").href = src; }
+
+  var overlay = $("overlay"), ovText = $("ovText"), ovSub = $("ovSub");
+  var progWrap = $("progWrap"), progBar = $("progBar"), spin = $("spin");
+
+  function fail(msg) {
+    spin.hidden = true; progWrap.hidden = true;
+    ovText.textContent = "تعذّر عرض الكتاب على شكل صفحات";
+    ovSub.textContent = msg || "يمكنك فتح ملف PDF مباشرةً.";
+    var box = $("errActions"); box.hidden = false;
+    box.innerHTML = '<a href="' + encodeURI(src) + '" target="_blank" rel="noopener">فتح ملف PDF</a>' +
+                    '<a href="' + encodeURI(src) + '" download>تنزيل الملف</a>' +
+                    '<a href="../index.html#books">عودة إلى الكتب</a>';
+  }
+
+  if (!src) { fail("لم يُحدَّد ملف للعرض."); return; }
+  if (!window.pdfjsLib || !window.St || !window.St.PageFlip) {
+    // libraries blocked / offline → graceful iframe fallback
+    var f = document.createElement("iframe");
+    f.src = src; f.style.cssText = "position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff";
+    f.title = title || "PDF";
+    document.body.appendChild(f); overlay.hidden = true; return;
+  }
+
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "../assets/vendor/pdfjs/pdf.worker.min.js";
+
+  // Page raster width — kept modest; pages render lazily so this is per-page cost.
+  var TARGET_W = Math.max(520, Math.min(760, Math.round((window.innerWidth || 1000) * 1.0)));
+  var PAGE_TIMEOUT = 22000;   // give up on a single slow page rather than hang the book
+
+  function toURL(canvas) {
+    return new Promise(function (res) {
+      if (canvas.toBlob) canvas.toBlob(function (b) { res(URL.createObjectURL(b)); }, "image/jpeg", 0.82);
+      else res(canvas.toDataURL("image/jpeg", 0.82));
+    });
+  }
+
+  var PDF = null, N = 0, RATIO = 1.414;
+  var cache = {}, pending = {};
+
+  function placeSlot(i, node) {
+    var slot = document.querySelector('[data-pg="' + i + '"]');
+    if (slot) { slot.innerHTML = ""; slot.appendChild(node); }
+  }
+  function skipped(i) {
+    cache[i] = "skip";
+    var d = document.createElement("div");
+    d.className = "pg-skip";
+    d.innerHTML = 'صفحة ' + (i + 1) + '<a href="' + encodeURI(src) + '" target="_blank" rel="noopener">فتحها في PDF</a>';
+    placeSlot(i, d);
+  }
+
+  function renderPage(i, scaleW) {          // i is 0-based
+    if (i < 0 || i >= N) return Promise.resolve();
+    if (cache[i] || pending[i]) return Promise.resolve();
+    pending[i] = true;
+    var W = scaleW || TARGET_W;
+    var task = null, timer = null;
+    return PDF.getPage(i + 1).then(function (page) {
+      var base = page.getViewport({ scale: 1 });
+      var vp = page.getViewport({ scale: W / base.width });
+      var canvas = document.createElement("canvas");
+      canvas.width = Math.ceil(vp.width);
+      canvas.height = Math.ceil(vp.height);
+      task = page.render({ canvasContext: canvas.getContext("2d", { alpha: false }), viewport: vp });
+      var timeout = new Promise(function (_, rej) {
+        timer = setTimeout(function () { try { task.cancel(); } catch (e) {} rej(new Error("timeout")); }, PAGE_TIMEOUT);
+      });
+      return Promise.race([task.promise, timeout]).then(function () {
+        clearTimeout(timer);
+        return toURL(canvas);
+      }).then(function (url) {
+        cache[i] = url;
+        page.cleanup();
+        canvas.width = canvas.height = 0;
+        var img = new Image();
+        img.decoding = "async";
+        img.alt = "صفحة " + (i + 1);
+        img.onload = function () { placeSlot(i, img); };
+        img.src = url;
+      });
+    }).catch(function (e) {
+      clearTimeout(timer);
+      pending[i] = false;
+      // one retry at a smaller size, then give up gracefully on that page
+      if (!scaleW && String(e && e.message) === "timeout") return renderPage(i, 460);
+      skipped(i);
+    }).then(function () { pending[i] = false; });
+  }
+
+  function ensureWindow(centerIdx) {
+    for (var k = centerIdx - 2; k <= centerIdx + 3; k++) renderPage(k);
+  }
+
+  pdfjsLib.getDocument({ url: src }).promise
+    .then(function (pdf) {
+      PDF = pdf; N = pdf.numPages;
+      $("total").textContent = String(N);
+      return pdf.getPage(1);
+    })
+    .then(function (p1) {
+      var b = p1.getViewport({ scale: 1 });
+      RATIO = b.height / b.width;
+      buildFlip();
+    })
+    .catch(function (e) { fail(String(e && e.message || e)); });
+
+  function buildFlip() {
+    var flipEl = $("flip");
+    var stage = $("stage");
+    var n = N, ratio = RATIO;
+
+    // n placeholder pages — each fills in on demand
+    var frag = document.createDocumentFragment();
+    for (var i = 0; i < n; i++) {
+      var d = document.createElement("div");
+      d.className = "pg";
+      d.setAttribute("data-pg", String(i));
+      d.innerHTML = '<span class="pg-load"></span>';
+      frag.appendChild(d);
+    }
+    flipEl.appendChild(frag);
+
+    var zw = $("zoomwrap");
+    function layout() {
+      var pad = 20;
+      var availH = Math.max(300, stage.clientHeight - pad * 2);
+      var availW = Math.max(240, stage.clientWidth - pad * 2);
+      var twoUp = availW > 820;
+      var pageW = twoUp ? (availW / 2) : availW;
+      var pageH = Math.min(availH, pageW * ratio);
+      pageW = pageH / ratio;
+      zw.style.width = Math.round(twoUp ? pageW * 2 : pageW) + "px";
+      zw.style.height = Math.round(pageH) + "px";
+      return { w: Math.round(pageW), h: Math.round(pageH) };
+    }
+    var l0 = layout();
+
+    var pf = new St.PageFlip(flipEl, {
+      width: l0.w, height: l0.h,
+      size: "stretch",
+      minWidth: 240, maxWidth: 900,
+      minHeight: Math.round(240 * ratio), maxHeight: Math.round(900 * ratio),
+      drawShadow: true, flippingTime: 650, usePortrait: true,
+      maxShadowOpacity: 0.5, showCover: true, mobileScrollSupport: true,
+      swipeDistance: 20, clickEventForward: true, useMouseEvents: true
+    });
+
+    pf.loadFromHTML(document.querySelectorAll("#flip .pg"));
+    flipEl.hidden = false;
+    overlay.hidden = true;
+    $("ctrls").hidden = false;
+    ensureWindow(0);
+
+    var rzT;
+    window.addEventListener("resize", function () {
+      clearTimeout(rzT);
+      rzT = setTimeout(function () {
+        var l = layout();
+        try { pf.update({ width: l.w, height: l.h }); } catch (e) {}
+      }, 200);
+    });
+
+    var cur = $("cur"), prev = $("prev"), next = $("next"), hint = $("hint");
+    function sync() {
+      var idx = pf.getCurrentPageIndex();      // 0-based, index of left/single page
+      var shown = Math.min(n, idx + 1);
+      cur.textContent = String(shown);
+      prev.disabled = idx <= 0;
+      next.disabled = idx >= n - 1;
+      ensureWindow(idx);
+    }
+    pf.on("flip", sync);
+    pf.on("changeState", sync);
+    sync();
+
+    prev.addEventListener("click", function () { pf.flipPrev(); });
+    next.addEventListener("click", function () { pf.flipNext(); });
+
+    // keyboard: in RTL, ArrowRight = previous, ArrowLeft = next
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight" || e.key === "PageUp") { pf.flipPrev(); }
+      else if (e.key === "ArrowLeft" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); pf.flipNext(); }
+      else if (e.key === "Escape") { if (document.fullscreenElement) document.exitFullscreen(); }
+      else if (e.key === "Home") { pf.turnToPage(0); }
+      else if (e.key === "End") { pf.turnToPage(n - 1); }
+    });
+
+    hint.classList.add("show");
+    setTimeout(function () { hint.classList.remove("show"); }, 4200);
+
+    // zoom
+    var zoom = 1;
+    function applyZoom() { zw.style.transform = "scale(" + zoom + ")"; }
+    $("zoomIn").addEventListener("click", function () { zoom = Math.min(2, zoom + 0.15); applyZoom(); });
+    $("zoomOut").addEventListener("click", function () { zoom = Math.max(0.6, zoom - 0.15); applyZoom(); });
+
+    // fullscreen
+    $("fs").addEventListener("click", function () {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+    });
+  }
+})();
+</script>
+</body>
+</html>

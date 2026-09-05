@@ -28,10 +28,14 @@ ships as plain static files.
 ├── articles/                  # Blog: index.html + _template.html (add posts here)
 ├── workshops/                 # 14 GENERATED workshop briefs + index.html (tools/gen_workshops.py)
 ├── expertise/                 # 10 GENERATED area pages + index.html (tools/gen_expertise.py)
+├── books/viewer.html          # Page-flip reader for the book sample PDFs (?src=&title=)
 ├── assets/
 │   ├── css/styles.css         # Main design system: light/dark, RTL, responsive
 │   ├── css/subpage.css        # Shared styles for articles/ and media-kit.html
 │   ├── js/main.js             # Content data (EN/AR) + all interactivity
+│   ├── vendor/pdfjs/          # pdf.js 3.11.174 (vendored) — used by books/viewer.html
+│   ├── vendor/page-flip/      # StPageFlip 2.0.7 (vendored) — page-turn effect
+│   ├── books/*.pdf            # Book "contents & introduction" samples
 │   ├── docs/Ali-Fathy-CV.pdf
 │   └── img/
 │       ├── icons/             # GENERATED favicons / PWA icons (tools/optimize_images.py)
