@@ -45,6 +45,8 @@ ships as plain static files.
 │       └── hero-portrait.jpg
 ├── tools/
 │   ├── _art.py                # Concept illustrations shared by the generators below
+│   ├── prepare_workshop_photos.py  # workshops/photos/ → assets/img/workshops/ (card crop)
+│   ├── workshop-image-prompts.md   # prompts + status for the workshop card artwork
 │   ├── workshops_en.py        # English text for the workshop pages, keyed by slug
 │   ├── gen_workshops.py       # → workshops/{,en/}*.html + both index.html
 │   ├── gen_expertise.py       # → expertise/{,en/}*.html + both index.html (+ concept art)

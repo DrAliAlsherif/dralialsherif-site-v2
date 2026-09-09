@@ -998,6 +998,29 @@
 
   // Sub-page hubs exist in both languages: services/ (ar) and services/en/.
   // The markup carries the Arabic path, so retarget on every language change.
+  // Workshop slugs that have a card photo in assets/img/workshops/.
+  // Maintained by tools/prepare_workshop_photos.py — edit there, not here.
+  // WORKSHOP_PHOTOS:start
+  const WORKSHOP_PHOTOS = new Set([
+    "ai-prompt-engineering-libraries",
+    "digital-repositories-standards",
+    "marc21-advanced-cataloging",
+    "rda-lcsh-cataloging",
+    "digital-preservation-manuscripts",
+    "repositories-archiving-ai-open-access",
+  ]);
+  // WORKSHOP_PHOTOS:end
+
+  // Workshop cards layer a photo over the generated SVG. Any photo that fails
+  // to load is removed, revealing the SVG underneath — so the grid stays whole
+  // while images are still being added one by one.
+  function dropMissingPhotos() {
+    $$(".wcard-photo").forEach((img) => {
+      img.addEventListener("error", () => img.remove(), { once: true });
+      if (img.complete && img.naturalWidth === 0) img.remove();
+    });
+  }
+
   function localiseHubLinks() {
     const dir = lang === "ar" ? "" : "en/";
     $$('a[data-i18n="services.all"]').forEach((a) => { a.href = `${ROOT}services/${dir}`; });
@@ -1126,7 +1149,7 @@
       const href = `${ROOT}workshops/${lang === "ar" ? "" : "en/"}${x.slug}.html`;
       const more = lang === "ar" ? "تفاصيل الورشة" : "Workshop details";
       return `<article class="wcard reveal" style="transition-delay:${(i % 4) * 40}ms">
-        <a class="wcard-media art-panel" href="${href}" aria-label="${title}">${workshopArt(x.en)}<span class="wcard-num">${String(i + 1).padStart(2, "0")}</span></a>
+        <a class="wcard-media art-panel" href="${href}" aria-label="${title}">${workshopArt(x.en)}${WORKSHOP_PHOTOS.has(x.slug) ? `<img class="wcard-photo" src="${ROOT}assets/img/workshops/${x.slug}.jpg" alt="" loading="lazy" decoding="async" width="1408" height="651" />` : ""}<span class="wcard-num">${String(i + 1).padStart(2, "0")}</span></a>
         <div class="wcard-body">
           <h3><a class="wcard-title-link" href="${href}">${title}</a></h3>
           ${desc ? `<p class="wcard-desc">${desc}</p>` : ""}
@@ -1137,6 +1160,7 @@
         </div>
       </article>`;
     }).join("");
+    dropMissingPhotos();
 
     // Projects (grouped)
     const pgroups = [

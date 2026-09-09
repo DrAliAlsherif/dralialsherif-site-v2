@@ -4,3 +4,10 @@ Thumbs.db
 Desktop.ini
 *~
 .vscode/
+
+# Source artwork for the workshop cards. Kept out of the repo on purpose:
+# .nojekyll means anything committed here is served publicly, and these are
+# ~10MB of full-frame originals — including the ones HOLD rejects in
+# tools/prepare_workshop_photos.py. The cropped, compressed versions the site
+# actually uses live in assets/img/workshops/ and are committed.
+workshops/photos/
