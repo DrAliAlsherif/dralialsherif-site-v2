@@ -28,6 +28,7 @@ ships as plain static files.
 ├── articles/                  # Blog: index.html + _template.html (add posts here)
 ├── workshops/                 # 14 GENERATED workshop briefs + index.html (tools/gen_workshops.py)
 ├── expertise/                 # 10 GENERATED area pages + index.html (tools/gen_expertise.py)
+├── services/                  # 8 GENERATED consulting-service pages + index.html (tools/gen_services.py)
 ├── books/viewer.html          # Page-flip reader for the book sample PDFs (?src=&title=)
 ├── assets/
 │   ├── css/styles.css         # Main design system: light/dark, RTL, responsive
@@ -45,6 +46,7 @@ ships as plain static files.
 ├── tools/
 │   ├── gen_workshops.py       # → workshops/*.html + workshops/index.html
 │   ├── gen_expertise.py       # → expertise/*.html + expertise/index.html (+ concept art)
+│   ├── gen_services.py        # → services/*.html + services/index.html (+ concept art)
 │   ├── build.py               # → ar/index.html + sitemap lastmod
 │   └── optimize_images.py     # (re)compress assets/img + build icons
 ├── IMPROVEMENTS.md            # Change log + TODO tracker
@@ -56,6 +58,7 @@ ships as plain static files.
 ```bash
 python tools/gen_workshops.py   # after editing workshop content
 python tools/gen_expertise.py   # after editing expertise content / area services
+python tools/gen_services.py    # after editing consulting-service content
 python tools/build.py           # after editing index.html (rebuilds ar/) — run the gen_* scripts first
 python tools/optimize_images.py # after adding images  (--dry-run to preview)
 ```

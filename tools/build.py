@@ -27,7 +27,8 @@ def build_ar():
     out = src.replace('<html lang="en" dir="ltr">', '<html lang="ar" dir="rtl">', 1)
 
     # 2. relative resource paths -> one level up (ar/ is a subdirectory)
-    out = re.sub(r'(href|src)="(assets/|workshops/|articles/|media-kit\.html|site\.webmanifest|404\.html)',
+    out = re.sub(r'(href|src)="(assets/|workshops/|expertise/|services/|articles/'
+                 r'|media-kit\.html|site\.webmanifest|404\.html)',
                  r'\1="../\2', out)
 
     # 3. canonical + og:url point at the Arabic URL; keep hreflang lines intact
