@@ -44,38 +44,17 @@ SLUGS = [
     "repositories-archiving-ai-open-access",
 ]
 
-# Images held back from the site. They are generated fine but carry defects the
-# crop cannot fix — burnt-in English wording on a page that also renders in
-# Arabic, prompt scaffolding the generator drew as UI chrome, a white ground
-# that glares inside the dark card grid, or subject matter from the wrong
-# domain. Their cards fall back to the generated SVG until the art is redone.
-# Drop a slug from here once its replacement lands in workshops/photos/.
-HOLD = {
-    "smart-event-management-ai":
-        "English labels throughout; 'SYSTEM KEY & STYLE GUIDE' scaffolding; "
-        "misspelt 'Potentialial Audience'; dated 'ACADEMIC CONFERENCE 2024'",
-    "institutional-innovation-ai":
-        "matrix is labelled with software-backlog terms (Quick Win, Bug Fix, "
-        "Maintenance Task) — not information-centre initiatives",
-    "library-services-ai-ml":
-        "English node labels burnt in",
-    "strategic-planning-big-data":
-        "large English headline burnt across the top",
-    "technical-operations-digital-library":
-        "white ground; English headline and stage labels",
-    "integrated-library-systems":
-        "white ground; modules read E-COMMERCE / WORKFLOW & TICKETS — wrong "
-        "domain for an ILS workshop (should be circulation, acquisitions, "
-        "serials, OPAC)",
-    "digital-collections":
-        "white ground; English headline",
-    "information-document-security":
-        "white ground; English headline; carries the caption from image 11",
-}
+# Images held back from the site. Empty now — the first pass had eight rejects
+# (burnt-in English wording on a bilingual page, prompt scaffolding drawn as UI
+# chrome, white grounds inside a dark grid, wrong-domain subject matter) and all
+# eight were reshot from the rewritten prompts in workshop-image-prompts.md.
+# Add a slug here with its reason to pull a card's photo without deleting it.
+HOLD = {}
 
-# Fraction of the source height to keep, per workshop number.
-KEEP = {1: .90, 2: .94, 3: .74, 4: .74, 5: .74, 6: 1.0, 7: .88,
-        8: .74, 9: .74, 10: .86, 11: .86, 12: .86, 13: 1.0, 14: 1.0}
+# Fraction of the source height to keep, per workshop number. Only the four
+# survivors of the first batch still carry the generator's chrome bar along
+# their bottom edge; everything else keeps its full frame.
+KEEP = {3: .74, 4: .74, 8: .74, 9: .74}
 
 
 def prepare(src: pathlib.Path, dst: pathlib.Path, keep: float) -> tuple:

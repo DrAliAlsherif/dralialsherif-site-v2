@@ -11,3 +11,4 @@ Desktop.ini
 # tools/prepare_workshop_photos.py. The cropped, compressed versions the site
 # actually uses live in assets/img/workshops/ and are committed.
 workshops/photos/
+workshops/photos2/

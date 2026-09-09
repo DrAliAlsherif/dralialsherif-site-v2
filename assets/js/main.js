@@ -269,7 +269,232 @@
     if (/archiv|preservation/.test(s)) return "archive";
     return "repository";
   }
-  const workshopArt = (title) => RART[workshopTheme(title)]();
+
+  // Per-workshop artwork, keyed by slug. Eight workshops whose generated photo
+  // was rejected get a bespoke drawing here rather than sharing a themed one
+  // from RART — tools/workshop-image-prompts.md records why those were held.
+  // Same 320x160 viewBox, and both top corners are left clear: the card's
+  // number badge sits top-right in English and top-left in Arabic.
+  const WART = {
+    // A conference as a system: seating, stage, then the run of the event.
+    "smart-event-management-ai"() {
+      let seats = "";
+      [30, 42, 54].forEach((r) => {
+        const x = (86 - 0.819 * r).toFixed(1);
+        const y1 = (86 - 0.574 * r).toFixed(1), y2 = (86 + 0.574 * r).toFixed(1);
+        seats += `<path class="ra-stroke ra-dim" d="M${x} ${y1} A${r} ${r} 0 0 0 ${x} ${y2}"/>`;
+      });
+      const panels = [[50, ""], [78, ""], [106, " ra-dim"]].map(([y, dim], i) =>
+        `<rect class="ra-stroke${dim}" x="168" y="${y}" width="46" height="22" rx="5"/>` +
+        `<rect class="${i === 0 ? "ra-accent" : "ra-dim2b"}" x="174" y="${y + 8}" width="${22 - i * 4}" height="3" rx="1.5"/>`
+      ).join("");
+      return raWrap(
+        seats +
+        '<path class="ra-stroke" d="M72 96 h30 l-6 -18 h-18 z"/>' +
+        '<circle class="ra-accent" cx="87" cy="86" r="3.5"/>' +
+        '<path class="ra-signal" d="M104 86 C130 84 136 62 166 60"/>' +
+        '<path class="ra-dim2" d="M104 88 C130 88 138 88 166 89"/>' +
+        '<path class="ra-dim2" d="M104 90 C130 92 136 114 166 117"/>' +
+        panels +
+        '<circle class="ra-stroke" cx="264" cy="102" r="19"/>' +
+        '<path class="ra-signal" d="M251 89 A19 19 0 0 1 277 91"/>' +
+        '<circle class="ra-accent2" cx="264" cy="102" r="4"/>'
+      );
+    },
+
+    // Initiatives plotted on value against effort, and one taken to scale.
+    "institutional-innovation-ai"() {
+      let grid = "";
+      [78, 108].forEach((y) => { grid += `<line class="ra-edge" x1="62" y1="${y}" x2="198" y2="${y}"/>`; });
+      [108, 152].forEach((x) => { grid += `<line class="ra-edge" x1="${x}" y1="44" x2="${x}" y2="130"/>`; });
+      const cards = [[74, 52, "ra-accent"], [116, 60, "ra-accent2"], [158, 50, "ra-dim2b"],
+                     [80, 96, "ra-dim2b"], [122, 112, "ra-dim2b"], [164, 100, "ra-dim2b"]]
+        .map(([x, y, fill], i) =>
+          `<rect class="ra-stroke${i > 2 ? " ra-dim" : ""}" x="${x}" y="${y}" width="26" height="20" rx="5"/>` +
+          `<rect class="${fill}" x="${x + 6}" y="${y + 8}" width="10" height="3" rx="1.5"/>`)
+        .join("");
+      let steps = "";
+      [[246, 110], [262, 94], [278, 78], [294, 62]].forEach(([x, y], i) => {
+        steps += `<rect class="${i === 3 ? "ra-accent" : "ra-dim2b"}" x="${x}" y="${y}" width="14" height="4" rx="2"/>`;
+      });
+      return raWrap(
+        grid +
+        '<path class="ra-stroke" d="M62 44 V130 H198"/>' +
+        cards +
+        '<path class="ra-stroke" d="M228 96 v-14 h10 v14 l9 20 a4 4 0 0 1 -4 6 h-20 a4 4 0 0 1 -4 -6 z"/>' +
+        '<path class="ra-stroke ra-dim" d="M226 80 h14"/>' +
+        '<circle class="ra-accent" cx="230" cy="70" r="3"/>' +
+        '<circle class="ra-accent2" cx="240" cy="62" r="2.4"/>' +
+        steps
+      );
+    },
+
+    // The desk, the assistant answering for it, and what use looks like.
+    "library-services-ai-ml"() {
+      const tiles = [[136, 96], [160, 82], [186, 70], [214, 60], [244, 50]]
+        .map(([x, y], i) =>
+          `<rect class="ra-stroke${i > 2 ? "" : " ra-dim"}" x="${x}" y="${y}" width="22" height="18" rx="4"/>` +
+          `<rect class="${i === 4 ? "ra-accent" : "ra-dim2b"}" x="${x + 5}" y="${y + 7}" width="12" height="3" rx="1.5"/>`)
+        .join("");
+      return raWrap(
+        '<path class="ra-stroke" d="M40 122 h68 l10 16 h-88 z"/>' +
+        '<path class="ra-stroke ra-dim" d="M52 122 v-6 h44 v6"/>' +
+        '<rect class="ra-stroke" x="50" y="52" width="58" height="38" rx="9"/>' +
+        '<path class="ra-stroke" d="M66 90 v10 l12 -10"/>' +
+        '<circle class="ra-accent" cx="66" cy="71" r="3.5"/>' +
+        '<circle class="ra-accent2" cx="79" cy="71" r="3.5"/>' +
+        '<circle class="ra-accent" cx="92" cy="71" r="3.5"/>' +
+        '<path class="ra-edge" d="M110 74 C124 74 128 96 136 100 M110 78 C126 84 130 76 158 88"/>' +
+        tiles +
+        '<polyline class="ra-signal" points="132,142 172,134 210,122 252,106 292,90"/>' +
+        '<circle class="ra-accent" cx="172" cy="134" r="3"/>' +
+        '<circle class="ra-accent" cx="252" cy="106" r="3"/>' +
+        '<circle class="ra-accent2" cx="292" cy="90" r="3.5"/>'
+      );
+    },
+
+    // Where the institution stands, and the two futures it plans against.
+    "strategic-planning-big-data"() {
+      let plane = '<path class="ra-stroke ra-dim" d="M28 142 L292 142 L250 88 L70 88 Z"/>';
+      [0.33, 0.66].forEach((f) => {
+        const xa = (28 + 264 * f).toFixed(0), xb = (70 + 180 * f).toFixed(0);
+        plane += `<line class="ra-edge" x1="${xa}" y1="142" x2="${xb}" y2="88"/>`;
+      });
+      plane += '<line class="ra-edge" x1="49" y1="115" x2="271" y2="115"/>';
+      const bars = [[74, 104], [96, 90], [118, 76], [140, 58]].map(([x, top], i) =>
+        `<rect class="ra-stroke${i === 3 ? "" : " ra-dim"}" x="${x}" y="${top}" width="13" height="${118 - top}" rx="2"/>` +
+        `<rect class="${i === 3 ? "ra-accent" : "ra-dim2b"}" x="${x + 3}" y="${top + 5}" width="7" height="3" rx="1.5"/>`
+      ).join("");
+      let dust = "";
+      [[60, 132], [82, 138], [104, 130], [126, 136], [150, 128],
+       [172, 138], [196, 130], [218, 136], [240, 128], [262, 134]].forEach(([x, y], i) => {
+        dust += `<circle class="${i % 3 ? "ra-dim2b" : "ra-accent"}" cx="${x}" cy="${y}" r="${i % 3 ? 1.6 : 2.2}"/>`;
+      });
+      return raWrap(
+        plane + dust + bars +
+        '<path class="ra-signal" d="M154 56 C196 44 224 44 246 48"/>' +
+        '<path class="ra-dim2" d="M154 62 C196 68 220 82 244 92"/>' +
+        '<circle class="ra-stroke" cx="256" cy="48" r="9"/>' +
+        '<circle class="ra-accent" cx="256" cy="48" r="3.5"/>' +
+        '<circle class="ra-stroke ra-dim" cx="256" cy="94" r="8"/>' +
+        '<circle class="ra-accent2" cx="256" cy="94" r="3"/>'
+      );
+    },
+
+    // A record moving through the stations that process it.
+    "technical-operations-digital-library"() {
+      let posts = "";
+      [66, 128, 190, 252].forEach((x) => {
+        posts += `<line class="ra-stroke ra-dim" x1="${x}" y1="74" x2="${x}" y2="98"/>`;
+      });
+      const heads =
+        '<path class="ra-stroke" d="M56 50 h20 l-7 14 v10 h-6 v-10 z"/>' +
+        '<circle class="ra-stroke" cx="124" cy="58" r="9"/>' +
+        '<circle class="ra-accent2" cx="124" cy="58" r="3"/>' +
+        '<circle class="ra-stroke ra-dim" cx="136" cy="67" r="6"/>' +
+        '<path class="ra-stroke" d="M190 46 l14 14 l-14 14 l-14 -14 z"/>' +
+        '<path class="ra-check" d="M184 60 l4 5 l9 -11"/>' +
+        '<path class="ra-stroke" d="M242 60 h20 m-7 -7 l7 7 l-7 7"/>';
+      let plates = "";
+      [38, 100, 162, 224, 286].forEach((x, i) => {
+        plates += `<rect class="ra-stroke${i % 2 ? " ra-dim" : ""}" x="${x - 11}" y="98" width="22" height="14" rx="3"/>` +
+                  `<rect class="${i === 4 ? "ra-accent" : "ra-dim2b"}" x="${x - 6}" y="103" width="12" height="3" rx="1.5"/>`;
+      });
+      let ticks = "";
+      for (let x = 34; x <= 290; x += 32) ticks += `<line class="ra-edge" x1="${x}" y1="137" x2="${x}" y2="143"/>`;
+      return raWrap(
+        posts + heads +
+        '<line class="ra-stroke" x1="24" y1="112" x2="296" y2="112"/>' +
+        plates +
+        '<line class="ra-stroke ra-dim" x1="24" y1="137" x2="296" y2="137"/>' + ticks +
+        '<circle class="ra-accent" cx="214" cy="137" r="4"/>'
+      );
+    },
+
+    // One database, and the modules that all read and write it.
+    "integrated-library-systems"() {
+      const mods = [[160, 34], [60, 76], [260, 76], [98, 132], [222, 132]];
+      let spokes = "", boxes = "";
+      mods.forEach(([x, y]) => {
+        spokes += `<line class="ra-edge" x1="160" y1="86" x2="${x}" y2="${y}"/>`;
+        boxes += `<rect class="ra-stroke" x="${x - 21}" y="${y - 15}" width="42" height="30" rx="7"/>`;
+      });
+      const icons =
+        '<circle class="ra-stroke" cx="157" cy="32" r="6"/><line class="ra-stroke" x1="161" y1="36" x2="166" y2="41"/>' +
+        '<path class="ra-stroke" d="M53 78 a9 9 0 1 0 3 -8"/><path class="ra-stroke" d="M52 68 v9 h9"/>' +
+        '<path class="ra-stroke" d="M251 70 h18 m-18 6 h18 m-18 6 h18"/>' +
+        '<path class="ra-stroke" d="M89 126 h18 v14 h-18 z"/>' +
+        '<path class="ra-accent2" d="M97 129 h2 v8 h-2 z M94 132 h8 v2 h-8 z"/>' +
+        '<path class="ra-stroke" d="M222 123 l9 3 v8 c0 6 -5 9 -9 11 c-4 -2 -9 -5 -9 -11 v-8 z"/>';
+      return raWrap(
+        '<circle class="ra-edge" cx="160" cy="86" r="46"/>' +
+        '<circle class="ra-edge" cx="160" cy="86" r="64"/>' +
+        spokes +
+        '<ellipse class="ra-stroke" cx="160" cy="74" rx="24" ry="8"/>' +
+        '<path class="ra-stroke" d="M136 74 v22 a24 8 0 0 0 48 0 v-22"/>' +
+        '<ellipse class="ra-accent" cx="160" cy="86" rx="10" ry="3.4"/>' +
+        boxes + icons
+      );
+    },
+
+    // Loose material finding its place in an ordered collection.
+    "digital-collections"() {
+      const glyph = (x, y, k) => {
+        const cx = x + 15, cy = y + 15;
+        if (k === 0) return `<rect class="ra-dim2" x="${cx - 8}" y="${cy - 7}" width="16" height="14" rx="2"/><circle class="ra-accent" cx="${cx + 3}" cy="${cy - 2}" r="2"/>`;
+        if (k === 1) return `<path class="ra-dim2" d="M${cx - 7} ${cy - 8} h11 l3 3 v13 h-14 z"/><path class="ra-edge" d="M${cx - 4} ${cy - 1} h8 M${cx - 4} ${cy + 3} h6"/>`;
+        if (k === 2) return `<path class="ra-dim2" d="M${cx - 9} ${cy - 6} l6 -3 l6 3 l6 -3 v13 l-6 3 l-6 -3 l-6 3 z"/>`;
+        return `<path class="ra-accent2" d="M${cx - 8} ${cy + 2} v-4 m3 4 v-8 m3 8 v-11 m3 11 v-7 m3 7 v-9 m3 9 v-5"/>`;
+      };
+      let wall = "", k = 0;
+      for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 4; c++) {
+          const x = 150 + c * 37, y = 38 + r * 38;
+          wall += `<rect class="ra-stroke ra-dim" x="${x}" y="${y}" width="30" height="30" rx="5"/>` + glyph(x, y, k % 4);
+          k++;
+        }
+      }
+      let loose = "";
+      [[40, 56], [58, 96], [32, 128]].forEach(([x, y], i) => {
+        loose += `<rect class="ra-stroke" x="${x}" y="${y}" width="28" height="26" rx="5" opacity="${(0.9 - i * 0.2).toFixed(1)}"/>` +
+                 `<path class="ra-edge" d="M${x - 12} ${y + 9} h8 M${x - 16} ${y + 16} h10"/>`;
+      });
+      return raWrap(
+        wall + loose +
+        '<path class="ra-check" d="M183 71 v-5 h6 M215 71 v-5 h-6 M183 95 v5 h6 M215 95 v5 h-6"/>'
+      );
+    },
+
+    // Layered records, what shields them, and the trail of who touched them.
+    "information-document-security"() {
+      let sheets = "";
+      [0, 1, 2].forEach((i) => {
+        const dx = 10 - i * 10, dy = i * 13;
+        sheets += `<path class="ra-stroke${i < 2 ? " ra-dim" : ""}" d="M${112 + dx} ${74 + dy} l58 -13 l40 11 l-58 13 z"/>`;
+      });
+      sheets += '<path class="ra-dim2" d="M132 96 l40 -9 M138 103 l30 -7"/>';
+      let ticks = "";
+      [38, 62, 90, 104, 140, 168, 176, 210, 238, 268, 284].forEach((x, i) => {
+        ticks += `<line class="ra-edge" x1="${x}" y1="137" x2="${x}" y2="${i % 3 ? 144 : 148}"/>`;
+      });
+      return raWrap(
+        '<path class="ra-stroke ra-dim" d="M74 108 C74 54 246 54 246 108"/>' +
+        '<path class="ra-signal" d="M74 108 C74 60 160 48 160 48"/>' +
+        sheets +
+        '<line class="ra-edge" x1="96" y1="58" x2="228" y2="116"/>' +
+        '<line class="ra-edge" x1="228" y1="58" x2="96" y2="116"/>' +
+        '<circle class="ra-node ra-node--a" cx="128" cy="72" r="5"/>' +
+        '<circle class="ra-node ra-node--a" cx="196" cy="102" r="5"/>' +
+        '<circle class="ra-dim2b" cx="204" cy="70" r="4.5"/>' +
+        '<line class="ra-stroke ra-dim" x1="24" y1="137" x2="296" y2="137"/>' + ticks
+      );
+    },
+  };
+
+  // A workshop with its own drawing uses it; the rest fall back to the
+  // themed illustration keyed off the title.
+  const workshopArt = (slug, title) =>
+    (WART[slug] || RART[workshopTheme(title)])();
 
   /* ---------------- DATA (bilingual) ---------------- */
   const DATA = {
@@ -1002,10 +1227,18 @@
   // Maintained by tools/prepare_workshop_photos.py — edit there, not here.
   // WORKSHOP_PHOTOS:start
   const WORKSHOP_PHOTOS = new Set([
+    "smart-event-management-ai",
+    "institutional-innovation-ai",
     "ai-prompt-engineering-libraries",
     "digital-repositories-standards",
+    "library-services-ai-ml",
+    "strategic-planning-big-data",
+    "technical-operations-digital-library",
     "marc21-advanced-cataloging",
     "rda-lcsh-cataloging",
+    "integrated-library-systems",
+    "digital-collections",
+    "information-document-security",
     "digital-preservation-manuscripts",
     "repositories-archiving-ai-open-access",
   ]);
@@ -1149,7 +1382,7 @@
       const href = `${ROOT}workshops/${lang === "ar" ? "" : "en/"}${x.slug}.html`;
       const more = lang === "ar" ? "تفاصيل الورشة" : "Workshop details";
       return `<article class="wcard reveal" style="transition-delay:${(i % 4) * 40}ms">
-        <a class="wcard-media art-panel" href="${href}" aria-label="${title}">${workshopArt(x.en)}${WORKSHOP_PHOTOS.has(x.slug) ? `<img class="wcard-photo" src="${ROOT}assets/img/workshops/${x.slug}.jpg" alt="" loading="lazy" decoding="async" width="1408" height="651" />` : ""}<span class="wcard-num">${String(i + 1).padStart(2, "0")}</span></a>
+        <a class="wcard-media art-panel" href="${href}" aria-label="${title}">${workshopArt(x.slug, x.en)}${WORKSHOP_PHOTOS.has(x.slug) ? `<img class="wcard-photo" src="${ROOT}assets/img/workshops/${x.slug}.jpg" alt="" loading="lazy" decoding="async" width="1408" height="651" />` : ""}<span class="wcard-num">${String(i + 1).padStart(2, "0")}</span></a>
         <div class="wcard-body">
           <h3><a class="wcard-title-link" href="${href}">${title}</a></h3>
           ${desc ? `<p class="wcard-desc">${desc}</p>` : ""}
