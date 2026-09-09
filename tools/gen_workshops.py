@@ -1,14 +1,28 @@
 # -*- coding: utf-8 -*-
-"""Generate Arabic workshop profile pages for dralialsherif.github.io.
+"""Generate the workshop profile pages for dralialsherif-site-v2.
 
-Run from anywhere:  python tools/gen_workshops.py
-Writes <repo>/workshops/<slug>.html + workshops/index.html.
+    python tools/gen_workshops.py
+
+Writes, for each workshop in WORKSHOPS:
+    workshops/<slug>.html       Arabic  (rtl)
+    workshops/en/<slug>.html    English (ltr)
+plus workshops/index.html and workshops/en/index.html.
+
+WORKSHOPS below holds the Arabic; tools/workshops_en.py holds the English,
+keyed by the same slug. The two must stay field-for-field parallel — the
+check in build() fails loudly if a list drifts out of step.
 """
-import os, html, pathlib
+import html
+import json as _json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from workshops_en import EN  # noqa: E402
 
 SITE = pathlib.Path(__file__).resolve().parent.parent
 OUT = SITE / "workshops"
-OUT.mkdir(exist_ok=True)
+(OUT / "en").mkdir(parents=True, exist_ok=True)
 
 # Public origin — keep in sync with tools/build.py SITE_URL.
 SITE_URL = "https://dralialsherif.github.io/dralialsherif-site-v2"
@@ -585,38 +599,160 @@ def li(items):
     return "\n".join(f"      <li>{html.escape(x)}</li>" for x in items)
 
 
+# ------------------------------------------------------------- page furniture
+CHROME = {
+    "ar": {
+        "dir": "rtl", "locale": "ar_AE",
+        "fonts": "family=IBM+Plex+Sans+Arabic:wght@400;500;600;700",
+        "skip": "تخطَّ إلى المحتوى",
+        "brand_name": "د. علي فتحي الشريف",
+        "brand_role": "ورش العمل والتدريب",
+        "back": "كل الورش",
+        "crumbs_nav": "مسار التصفح",
+        "home": "الرئيسية",
+        "hub": "ورش العمل والتدريب",
+        "kicker": "حقيبة تدريبية",
+        "meta_label": "بيانات الورشة",
+        "k_topic": "مجال التدريب",
+        "k_level": "المستوى",
+        "k_duration": "المدة المقترحة",
+        "k_lang": "لغة التقديم",
+        "v_lang": "العربية",
+        "k_prereq": "متطلبات سابقة",
+        "h_objectives": "أهداف الورشة",
+        "h_contents": "أهم محتويات الورشة",
+        "h_outcomes": "مخرجات التعلّم",
+        "outcomes_lead": "يُتوقَّع من المشارك بعد إتمام الورشة أن يكون قادرًا على:",
+        "h_audience": "الفئة المستهدفة",
+        "cta_line": "لحجز هذه الورشة أو تصميم نسخة مخصّصة لمؤسستك",
+        "cta_btn": "اطلب هذه الورشة",
+        "rights": "جميع الحقوق محفوظة.",
+        "footer_back": "عودة إلى ورش العمل والتدريب",
+        "switch": "English",
+        "switch_label": "Read this page in English",
+        "site_back": "الموقع الرئيسي",
+        "index_kicker": "التدريب",
+        "index_title": "ورش العمل والتدريب",
+        "index_overview": "أربع عشرة حقيبة تدريبية متخصّصة تُقدَّم باللغة العربية. اختر ورشة للاطلاع على أهدافها ومحتوياتها ومخرجات تعلّمها ومدّتها والفئة المستهدفة.",
+        "index_desc": "حقائب تدريبية متخصّصة في الذكاء الاصطناعي والمستودعات الرقمية والفهرسة والحفظ الرقمي — أهداف كل ورشة ومحتوياتها ومخرجات تعلّمها وفئتها المستهدفة.",
+        "index_footer_back": "عودة إلى الموقع",
+    },
+    "en": {
+        "dir": "ltr", "locale": "en_US",
+        "fonts": "family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700",
+        "skip": "Skip to content",
+        "brand_name": "Dr. Ali Fathy Alsherif",
+        "brand_role": "Workshops &amp; training",
+        "back": "All workshops",
+        "crumbs_nav": "Breadcrumb",
+        "home": "Home",
+        "hub": "Workshops &amp; training",
+        "kicker": "Training programme",
+        "meta_label": "Workshop details",
+        "k_topic": "Training area",
+        "k_level": "Level",
+        "k_duration": "Suggested duration",
+        "k_lang": "Delivery language",
+        "v_lang": "Arabic",
+        "k_prereq": "Prerequisites",
+        "h_objectives": "Workshop objectives",
+        "h_contents": "What the workshop covers",
+        "h_outcomes": "Learning outcomes",
+        "outcomes_lead": "By the end of the workshop, participants should be able to:",
+        "h_audience": "Who it is for",
+        "cta_line": "To book this workshop or have a version tailored to your institution",
+        "cta_btn": "Request this workshop",
+        "rights": "All rights reserved.",
+        "footer_back": "Back to workshops &amp; training",
+        "switch": "العربية",
+        "switch_label": "اقرأ هذه الصفحة بالعربية",
+        "site_back": "Main site",
+        "index_kicker": "Training",
+        "index_title": "Workshops &amp; training",
+        "index_overview": "Fourteen specialist training programmes, delivered in Arabic. Open a workshop for its objectives, what it covers, its learning outcomes, its duration and who it is for.",
+        "index_desc": "Specialist training programmes in artificial intelligence, digital repositories, cataloguing and digital preservation — each workshop's objectives, contents, learning outcomes and target audience.",
+        "index_footer_back": "Back to the site",
+    },
+}
+
+LIST_FIELDS = ("objectives", "contents", "outcomes", "audience")
+TEXT_FIELDS = ("topic", "level", "duration", "prereq", "overview")
+
+
+def url_for(slug, lang):
+    seg = "workshops/" if lang == "ar" else "workshops/en/"
+    return f"{SITE_URL}/{seg}{slug + '.html' if slug else ''}"
+
+
+def alternates(slug):
+    ar, en = url_for(slug, "ar"), url_for(slug, "en")
+    return (f'<link rel="alternate" hreflang="ar" href="{ar}" />\n'
+            f'<link rel="alternate" hreflang="en" href="{en}" />\n'
+            f'<link rel="alternate" hreflang="x-default" href="{en}" />')
+
+
+def fields(w, lang):
+    """The workshop's text for one language, as a flat dict."""
+    if lang == "ar":
+        d = {k: w[k] for k in ("overview", "level", "duration", "prereq")}
+        d["topic"] = w["topic_ar"]
+        d["title"] = w["title_ar"]
+        d.update({k: w[k] for k in LIST_FIELDS})
+        return d
+    e = EN[w["slug"]]
+    d = {k: e[k] for k in TEXT_FIELDS}
+    d["title"] = w["title_en"]
+    d.update({k: e[k] for k in LIST_FIELDS})
+    return d
+
+
+def check_parallel():
+    """The two languages must describe the same workshop, item for item."""
+    missing = [w["slug"] for w in WORKSHOPS if w["slug"] not in EN]
+    assert not missing, f"workshops_en.py is missing: {missing}"
+    extra = [k for k in EN if k not in {w["slug"] for w in WORKSHOPS}]
+    assert not extra, f"workshops_en.py has unknown slugs: {extra}"
+    for w in WORKSHOPS:
+        for f in LIST_FIELDS:
+            a, b = len(w[f]), len(EN[w["slug"]][f])
+            assert a == b, f'{w["slug"]}.{f}: {a} Arabic items vs {b} English'
+        for f in TEXT_FIELDS:
+            assert EN[w["slug"]].get(f), f'{w["slug"]}.{f} is empty in workshops_en.py'
+
+
 PAGE = """<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="{lang}" dir="{dir}">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#4f46e5" />
-<title>{title} — د. علي فتحي الشريف</title>
+<title>{title} — {brand_name}</title>
 <meta name="description" content="{meta_desc}" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
-<link rel="canonical" href="{site_url}/workshops/{slug}.html" />
+<link rel="canonical" href="{canonical}" />
+{alternates}
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%234f46e5'/%3E%3Ctext x='50' y='68' font-size='54' font-family='Georgia,serif' font-weight='700' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
 <meta property="og:type" content="article" />
 <meta property="og:title" content="{title}" />
 <meta property="og:description" content="{meta_desc}" />
-<meta property="og:url" content="{site_url}/workshops/{slug}.html" />
-<meta property="og:locale" content="ar_AE" />
+<meta property="og:url" content="{canonical}" />
+<meta property="og:locale" content="{locale}" />
 <!-- TODO(og-image): add a branded 1200x630 image at assets/img/og/workshop.jpg
      (or one per workshop) and point og:image there. Falls back to the portrait. -->
 <meta property="og:image" content="{site_url}/assets/img/hero-portrait.jpg?v=17" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/workshop.css" />
+<link href="https://fonts.googleapis.com/css2?{fonts}&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="{up}assets/css/subpage.css?v=2" />
 <script type="application/ld+json">
 {{
   "@context": "https://schema.org",
   "@type": "Course",
-  "name": "{title}",
+  "name": "{title_plain}",
   "description": "{meta_desc}",
   "inLanguage": "ar",
-  "url": "{site_url}/workshops/{slug}.html",
+  "url": "{canonical}",
   "courseMode": ["onsite", "online"],
   "teaches": {teaches_json},
   "provider": {{
@@ -634,85 +770,88 @@ PAGE = """<!DOCTYPE html>
 </script>
 </head>
 <body>
-<a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+<a class="skip-link" href="#main">{skip}</a>
 
 <header class="wsp-header">
   <div class="wsp-container wsp-header-inner">
-    <a class="wsp-brand" href="../index.html">
+    <a class="wsp-brand" href="{home_href}">
       <span class="wsp-brand-mark">AF</span>
       <span class="wsp-brand-text">
-        <span class="wsp-brand-name">د. علي فتحي الشريف</span>
-        <span class="wsp-brand-role">ورش العمل والتدريب</span>
+        <span class="wsp-brand-name">{brand_name}</span>
+        <span class="wsp-brand-role">{brand_role}</span>
       </span>
     </a>
-    <a class="wsp-back" href="../index.html#workshops">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
-      كل الورش
-    </a>
+    <span class="wsp-header-links">
+      <a class="wsp-lang" href="{switch_href}" hreflang="{switch_lang}" lang="{switch_lang}" title="{switch_label}">{switch}</a>
+      <a class="wsp-back" href="{home_href}#workshops">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        {back}
+      </a>
+    </span>
   </div>
 </header>
 
 <main id="main" class="wsp-container wsp-main">
-  <nav class="wsp-crumbs" aria-label="مسار التصفح">
-    <a href="../index.html">الرئيسية</a> <span aria-hidden="true">/</span>
-    <a href="../index.html#workshops">ورش العمل والتدريب</a> <span aria-hidden="true">/</span>
+  <nav class="wsp-crumbs" aria-label="{crumbs_nav}">
+    <a href="{home_href}">{home}</a> <span aria-hidden="true">/</span>
+    <a href="index.html">{hub}</a> <span aria-hidden="true">/</span>
     <span aria-current="page">{title}</span>
   </nav>
 
   <article class="wsp-doc">
-    <p class="wsp-kicker">حقيبة تدريبية</p>
+    <p class="wsp-kicker">{kicker}</p>
     <h1 class="wsp-title">{title}</h1>
-    <p class="wsp-title-en" dir="ltr">{title_en}</p>
+    <p class="wsp-title-en" lang="{other_lang}"><bdi>{title_other}</bdi></p>
     <p class="wsp-overview">{overview}</p>
 
-    <aside class="wsp-meta" aria-label="بيانات الورشة">
-      <div><span class="wsp-meta-k">مجال التدريب</span><span class="wsp-meta-v">{topic}</span></div>
-      <div><span class="wsp-meta-k">المستوى</span><span class="wsp-meta-v">{level}</span></div>
-      <div><span class="wsp-meta-k">المدة المقترحة</span><span class="wsp-meta-v">{duration}</span></div>
-      <div><span class="wsp-meta-k">لغة التقديم</span><span class="wsp-meta-v">العربية</span></div>
-      <div class="wsp-meta-wide"><span class="wsp-meta-k">متطلبات سابقة</span><span class="wsp-meta-v">{prereq}</span></div>
+    <aside class="wsp-meta" aria-label="{meta_label}">
+      <div><span class="wsp-meta-k">{k_topic}</span><span class="wsp-meta-v">{topic}</span></div>
+      <div><span class="wsp-meta-k">{k_level}</span><span class="wsp-meta-v">{level}</span></div>
+      <div><span class="wsp-meta-k">{k_duration}</span><span class="wsp-meta-v">{duration}</span></div>
+      <div><span class="wsp-meta-k">{k_lang}</span><span class="wsp-meta-v">{v_lang}</span></div>
+      <div class="wsp-meta-wide"><span class="wsp-meta-k">{k_prereq}</span><span class="wsp-meta-v">{prereq}</span></div>
     </aside>
 
     <section class="wsp-section">
-      <h2><span class="wsp-num">1</span> أهداف الورشة</h2>
+      <h2><span class="wsp-num">1</span> {h_objectives}</h2>
       <ul class="wsp-list">
 {objectives}
       </ul>
     </section>
 
     <section class="wsp-section">
-      <h2><span class="wsp-num">2</span> أهم محتويات الورشة</h2>
+      <h2><span class="wsp-num">2</span> {h_contents}</h2>
       <ul class="wsp-list wsp-list-num">
 {contents}
       </ul>
     </section>
 
     <section class="wsp-section">
-      <h2><span class="wsp-num">3</span> مخرجات التعلّم</h2>
-      <p class="wsp-lead">يُتوقَّع من المشارك بعد إتمام الورشة أن يكون قادرًا على:</p>
+      <h2><span class="wsp-num">3</span> {h_outcomes}</h2>
+      <p class="wsp-lead">{outcomes_lead}</p>
       <ul class="wsp-list wsp-list-check">
 {outcomes}
       </ul>
     </section>
 
     <section class="wsp-section">
-      <h2><span class="wsp-num">4</span> الفئة المستهدفة</h2>
+      <h2><span class="wsp-num">4</span> {h_audience}</h2>
       <ul class="wsp-list">
 {audience}
       </ul>
     </section>
 
     <section class="wsp-cta">
-      <p>لحجز هذه الورشة أو تصميم نسخة مخصّصة لمؤسستك</p>
-      <a class="wsp-btn" href="../index.html?ws={slug}#contact">اطلب هذه الورشة</a>
+      <p>{cta_line}</p>
+      <a class="wsp-btn" href="{home_href}?ws={slug}#contact">{cta_btn}</a>
     </section>
   </article>
 </main>
 
 <footer class="wsp-footer">
   <div class="wsp-container">
-    <span>© <span id="y"></span> د. علي فتحي الشريف — جميع الحقوق محفوظة.</span>
-    <a href="../index.html#workshops">عودة إلى ورش العمل والتدريب</a>
+    <span>© <span id="y"></span> {brand_name} — {rights}</span>
+    <a href="{home_href}#workshops">{footer_back}</a>
   </div>
 </footer>
 <script>document.getElementById("y").textContent=new Date().getFullYear();</script>
@@ -720,98 +859,57 @@ PAGE = """<!DOCTYPE html>
 </html>
 """
 
-for w in WORKSHOPS:
-    meta_desc = (w["overview"][:150] + "…") if len(w["overview"]) > 150 else w["overview"]
-    # "teaches" = the workshop content axes, as a JSON array literal for the LD block
-    teaches_json = _json.dumps(w["contents"], ensure_ascii=False)
-    page = PAGE.format(
-        title=html.escape(w["title_ar"]),
-        title_en=html.escape(w["title_en"]),
-        meta_desc=html.escape(meta_desc),
-        slug=w["slug"],
-        site_url=SITE_URL,
-        teaches_json=teaches_json,
-        overview=html.escape(w["overview"]),
-        topic=html.escape(w["topic_ar"]),
-        level=html.escape(w["level"]),
-        duration=html.escape(w["duration"]),
-        prereq=html.escape(w["prereq"]),
-        objectives=li(w["objectives"]),
-        contents=li(w["contents"]),
-        outcomes=li(w["outcomes"]),
-        audience=li(w["audience"]),
-    )
-    (OUT / f"{w['slug']}.html").write_text(page, encoding="utf-8")
-    print("wrote", w["slug"] + ".html")
-
-# ---- index page ----
-cards = "\n".join(
-    f"""      <a class="wsp-card" href="{w['slug']}.html">
-        <span class="wsp-card-num">{i:02d}</span>
-        <span class="wsp-card-title">{html.escape(w['title_ar'])}</span>
-        <span class="wsp-card-topic">{html.escape(w['topic_ar'])}</span>
-      </a>"""
-    for i, w in enumerate(WORKSHOPS, 1)
-)
-
-_itemlist = _json.dumps({
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": "ورش العمل والتدريب — د. علي فتحي الشريف",
-    "itemListElement": [
-        {
-            "@type": "ListItem",
-            "position": i,
-            "url": f"{SITE_URL}/workshops/{w['slug']}.html",
-            "name": w["title_ar"],
-        }
-        for i, w in enumerate(WORKSHOPS, 1)
-    ],
-}, ensure_ascii=False, indent=2)
-INDEX = f"""<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+INDEX = """<!DOCTYPE html>
+<html lang="{lang}" dir="{dir}">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ورش العمل والتدريب — د. علي فتحي الشريف</title>
-<meta name="description" content="حقائب تدريبية متخصّصة في الذكاء الاصطناعي والمستودعات الرقمية والفهرسة والحفظ الرقمي — أهداف كل ورشة ومحتوياتها ومخرجات تعلّمها وفئتها المستهدفة." />
-<link rel="canonical" href="{SITE_URL}/workshops/" />
+<meta name="theme-color" content="#4f46e5" />
+<title>{index_title} — {brand_name}</title>
+<meta name="description" content="{index_desc}" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
+<link rel="canonical" href="{canonical}" />
+{alternates}
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%234f46e5'/%3E%3Ctext x='50' y='68' font-size='54' font-family='Georgia,serif' font-weight='700' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="{index_title} — {brand_name}" />
+<meta property="og:description" content="{index_desc}" />
+<meta property="og:url" content="{canonical}" />
+<meta property="og:locale" content="{locale}" />
+<meta property="og:image" content="{site_url}/assets/img/hero-portrait.jpg?v=17" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/workshop.css" />
-<meta property="og:type" content="website" />
-<meta property="og:title" content="ورش العمل والتدريب — د. علي فتحي الشريف" />
-<meta property="og:url" content="{SITE_URL}/workshops/" />
-<meta property="og:locale" content="ar_AE" />
-<meta property="og:image" content="{SITE_URL}/assets/img/hero-portrait.jpg?v=17" />
+<link href="https://fonts.googleapis.com/css2?{fonts}&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="{up}assets/css/subpage.css?v=2" />
 <script type="application/ld+json">
-{_itemlist}
+{itemlist}
 </script>
 </head>
 <body>
+<a class="skip-link" href="#main">{skip}</a>
 <header class="wsp-header">
   <div class="wsp-container wsp-header-inner">
-    <a class="wsp-brand" href="../index.html">
+    <a class="wsp-brand" href="{home_href}">
       <span class="wsp-brand-mark">AF</span>
       <span class="wsp-brand-text">
-        <span class="wsp-brand-name">د. علي فتحي الشريف</span>
-        <span class="wsp-brand-role">ورش العمل والتدريب</span>
+        <span class="wsp-brand-name">{brand_name}</span>
+        <span class="wsp-brand-role">{brand_role}</span>
       </span>
     </a>
-    <a class="wsp-back" href="../index.html">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
-      الموقع الرئيسي
-    </a>
+    <span class="wsp-header-links">
+      <a class="wsp-lang" href="{switch_href}" hreflang="{switch_lang}" lang="{switch_lang}" title="{switch_label}">{switch}</a>
+      <a class="wsp-back" href="{home_href}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        {site_back}
+      </a>
+    </span>
   </div>
 </header>
-<main class="wsp-container wsp-main">
+<main id="main" class="wsp-container wsp-main">
   <article class="wsp-doc">
-    <p class="wsp-kicker">التدريب</p>
-    <h1 class="wsp-title">ورش العمل والتدريب</h1>
-    <p class="wsp-overview">حقائب تدريبية مهنية قُدّمت لأخصائيي المكتبات والأرشيف وفرق المعرفة في العالم العربي. اختر ورشة للاطلاع على أهدافها وأهم محتوياتها ومخرجات تعلّمها وفئتها المستهدفة.</p>
+    <p class="wsp-kicker">{index_kicker}</p>
+    <h1 class="wsp-title">{index_title}</h1>
+    <p class="wsp-overview">{index_overview}</p>
     <div class="wsp-cards">
 {cards}
     </div>
@@ -819,17 +917,94 @@ INDEX = f"""<!DOCTYPE html>
 </main>
 <footer class="wsp-footer">
   <div class="wsp-container">
-    <span>© <span id="y"></span> د. علي فتحي الشريف — جميع الحقوق محفوظة.</span>
-    <a href="../index.html#workshops">عودة إلى الموقع</a>
+    <span>© <span id="y"></span> {brand_name} — {rights}</span>
+    <a href="{home_href}#workshops">{index_footer_back}</a>
   </div>
 </footer>
 <script>document.getElementById("y").textContent=new Date().getFullYear();</script>
 </body>
 </html>
 """
-(OUT / "index.html").write_text(INDEX, encoding="utf-8")
-print("wrote index.html")
 
-# ---- slug map for main.js patching ----
-import json
-print(json.dumps({w["title_en"]: w["slug"] for w in WORKSHOPS}, ensure_ascii=False, indent=2))
+
+def plain(s):
+    return s.replace("&amp;", "&")
+
+
+def build(lang):
+    c = CHROME[lang]
+    other = "en" if lang == "ar" else "ar"
+    up = "../" if lang == "ar" else "../../"
+    home_href = f"{up}index.html"
+    out_dir = OUT if lang == "ar" else OUT / "en"
+
+    for w in WORKSHOPS:
+        f = fields(w, lang)
+        f_other = fields(w, other)
+        ov = f["overview"]
+        meta_desc = (ov[:150] + "…") if len(ov) > 150 else ov
+        page = PAGE.format(
+            lang=lang, dir=c["dir"], locale=c["locale"], fonts=c["fonts"], up=up,
+            site_url=SITE_URL, canonical=url_for(w["slug"], lang),
+            alternates=alternates(w["slug"]), slug=w["slug"],
+            title=html.escape(f["title"], quote=False),
+            title_plain=html.escape(plain(f["title"])),
+            title_other=html.escape(f_other["title"], quote=False),
+            other_lang=other,
+            meta_desc=html.escape(meta_desc),
+            teaches_json=_json.dumps(f["contents"], ensure_ascii=False),
+            overview=html.escape(ov, quote=False),
+            topic=f["topic"], level=html.escape(f["level"], quote=False),
+            duration=html.escape(f["duration"], quote=False),
+            prereq=html.escape(f["prereq"], quote=False),
+            objectives=li(f["objectives"]), contents=li(f["contents"]),
+            outcomes=li(f["outcomes"]), audience=li(f["audience"]),
+            switch_href=(f'en/{w["slug"]}.html' if lang == "ar" else f'../{w["slug"]}.html'),
+            switch_lang=other, home_href=home_href,
+            **{k: c[k] for k in ("skip", "brand_name", "brand_role", "back", "crumbs_nav",
+                                 "home", "hub", "kicker", "meta_label", "k_topic", "k_level",
+                                 "k_duration", "k_lang", "v_lang", "k_prereq", "h_objectives",
+                                 "h_contents", "h_outcomes", "outcomes_lead", "h_audience",
+                                 "cta_line", "cta_btn", "rights", "footer_back",
+                                 "switch", "switch_label")},
+        )
+        (out_dir / f"{w['slug']}.html").write_text(page, encoding="utf-8")
+
+    cards = "\n".join(
+        f"""      <a class="wsp-card" href="{w['slug']}.html">
+        <span class="wsp-card-num">{i:02d}</span>
+        <span class="wsp-card-title">{html.escape(fields(w, lang)['title'], quote=False)}</span>
+        <span class="wsp-card-topic">{fields(w, lang)['topic']}</span>
+      </a>"""
+        for i, w in enumerate(WORKSHOPS, 1)
+    )
+    itemlist = _json.dumps({
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": f"{plain(c['index_title'])} — Dr. Ali Fathy Alsherif",
+        "inLanguage": lang,
+        "itemListElement": [
+            {"@type": "ListItem", "position": i,
+             "url": url_for(w["slug"], lang), "name": plain(fields(w, lang)["title"])}
+            for i, w in enumerate(WORKSHOPS, 1)
+        ],
+    }, ensure_ascii=False, indent=2)
+
+    index = INDEX.format(
+        lang=lang, dir=c["dir"], locale=c["locale"], fonts=c["fonts"], up=up,
+        site_url=SITE_URL, canonical=url_for(None, lang), alternates=alternates(None),
+        itemlist=itemlist, cards=cards, home_href=home_href,
+        switch_href=("en/" if lang == "ar" else "../"), switch_lang=other,
+        index_desc=html.escape(c["index_desc"]),
+        index_overview=html.escape(c["index_overview"], quote=False),
+        **{k: c[k] for k in ("skip", "brand_name", "brand_role", "site_back", "rights",
+                             "index_kicker", "index_title", "index_footer_back",
+                             "switch", "switch_label")},
+    )
+    (out_dir / "index.html").write_text(index, encoding="utf-8")
+    print(f"wrote {len(WORKSHOPS)} pages + index for [{lang}] -> {out_dir.relative_to(SITE)}")
+
+
+check_parallel()
+for _lang in ("ar", "en"):
+    build(_lang)

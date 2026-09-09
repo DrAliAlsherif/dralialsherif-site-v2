@@ -996,6 +996,16 @@
   const t = (k) => (I18N[lang] && I18N[lang][k]) || (I18N.en[k] || k);
   const pick = (o) => (lang === "ar" ? o.ar : o.en);
 
+  // Sub-page hubs exist in both languages: services/ (ar) and services/en/.
+  // The markup carries the Arabic path, so retarget on every language change.
+  function localiseHubLinks() {
+    const dir = lang === "ar" ? "" : "en/";
+    $$('a[data-i18n="services.all"]').forEach((a) => { a.href = `${ROOT}services/${dir}`; });
+    $$('a[data-i18n="expertise.all"]').forEach((a) => { a.href = `${ROOT}expertise/${dir}`; });
+    $$('a[data-i18n="workshops.all"]').forEach((a) => { a.href = `${ROOT}workshops/${dir}`; });
+    $$('a[data-i18n="articles.all"]').forEach((a) => { a.href = `${ROOT}articles/${dir}`; });
+  }
+
   /* ---------------- Render collections ---------------- */
   function render() {
     // Marquee
@@ -1007,7 +1017,7 @@
     // Expertise
     $("#expertiseGrid").innerHTML = DATA.expertise.map((x, i) => {
       const [ti, de] = pick(x);
-      const href = `${ROOT}expertise/${x.slug}.html`;
+      const href = `${ROOT}expertise/${lang === "ar" ? "" : "en/"}${x.slug}.html`;
       const more = lang === "ar" ? "الخدمات والتفاصيل" : "Services & details";
       return `<article class="xcard reveal" style="transition-delay:${(i % 4) * 40}ms">
         <a class="xart art-panel" href="${href}" aria-label="${ti}">${RART[x.art]()}</a>
@@ -1060,7 +1070,7 @@
             <span class="bc-year">${x.year}</span>
           </div>`;
       const read = x.sample
-        ? `<a class="book-read" href="books/viewer.html?src=${encodeURIComponent("../" + x.sample)}&amp;title=${encodeURIComponent(title)}">
+        ? `<a class="book-read" href="${ROOT}books/viewer.html?src=${encodeURIComponent("../" + x.sample)}&amp;title=${encodeURIComponent(title)}&amp;lang=${lang}">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10 5 6.5 4.7 4 5.4V19c2.5-.7 6-.4 8 1.1 2-1.5 5.5-1.8 8-1.1V5.4C17.5 4.7 14 5 12 6.5Z"/><path d="M12 6.5v13.6"/></svg>
             ${lang === "ar" ? "تصفّح مقدمة الكتاب" : "Read the sample"}
           </a>`
@@ -1113,7 +1123,7 @@
     $("#workshopsGrid").innerHTML = DATA.workshops.map((x, i) => {
       const title = lang === "ar" ? x.ar : x.en;
       const desc = lang === "ar" ? x.descAr : x.descEn;
-      const href = `${ROOT}workshops/${x.slug}.html`;
+      const href = `${ROOT}workshops/${lang === "ar" ? "" : "en/"}${x.slug}.html`;
       const more = lang === "ar" ? "تفاصيل الورشة" : "Workshop details";
       return `<article class="wcard reveal" style="transition-delay:${(i % 4) * 40}ms">
         <a class="wcard-media art-panel" href="${href}" aria-label="${title}">${workshopArt(x.en)}<span class="wcard-num">${String(i + 1).padStart(2, "0")}</span></a>
@@ -1209,7 +1219,7 @@
     // Services
     $("#servicesGrid").innerHTML = DATA.services.map((x, i) => {
       const [ti, de] = pick(x);
-      const href = `${ROOT}services/${x.slug}.html`;
+      const href = `${ROOT}services/${lang === "ar" ? "" : "en/"}${x.slug}.html`;
       const more = lang === "ar" ? "تفاصيل الخدمة" : "Service details";
       return `<article class="scard reveal" style="transition-delay:${(i % 4) * 40}ms">
         <a class="scard-art art-panel" href="${href}" aria-label="${ti}">${RART[x.art]()}</a>
@@ -1322,6 +1332,7 @@
   function applyI18n() {
     document.documentElement.lang = lang;
     document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    localiseHubLinks();
     $$("[data-i18n]").forEach((el) => {
       const k = el.getAttribute("data-i18n");
       const val = t(k);
@@ -1511,9 +1522,9 @@
     DATA.books.forEach((x) => idx.push({ cat: "Book", catAr: "كتاب", en: x.en[0], ar: x.ar[0], to: "#books" }));
     DATA.research.forEach((x) => idx.push({ cat: "Research", catAr: "بحث", en: x.en[0], ar: x.ar[0], to: "#research" }));
     DATA.projects.forEach((x) => idx.push({ cat: "Project", catAr: "مشروع", en: x.title.en, ar: x.title.ar, to: "#projects" }));
-    DATA.workshops.forEach((x) => idx.push({ cat: "Workshop", catAr: "ورشة", en: x.en, ar: x.ar, to: `${ROOT}workshops/${x.slug}.html` }));
-    DATA.expertise.forEach((x) => idx.push({ cat: "Expertise", catAr: "خبرة", en: x.en[0], ar: x.ar[0], to: `${ROOT}expertise/${x.slug}.html` }));
-    DATA.services.forEach((x) => idx.push({ cat: "Service", catAr: "خدمة", en: x.en[0], ar: x.ar[0], to: `${ROOT}services/${x.slug}.html` }));
+    DATA.workshops.forEach((x) => idx.push({ cat: "Workshop", catAr: "ورشة", en: x.en, ar: x.ar, to: `${ROOT}workshops/${lang === "ar" ? "" : "en/"}${x.slug}.html` }));
+    DATA.expertise.forEach((x) => idx.push({ cat: "Expertise", catAr: "خبرة", en: x.en[0], ar: x.ar[0], to: `${ROOT}expertise/${lang === "ar" ? "" : "en/"}${x.slug}.html` }));
+    DATA.services.forEach((x) => idx.push({ cat: "Service", catAr: "خدمة", en: x.en[0], ar: x.ar[0], to: `${ROOT}services/${lang === "ar" ? "" : "en/"}${x.slug}.html` }));
     DATA.events.forEach((x) => idx.push({ cat: "Event", catAr: "فعالية", en: x.en[0], ar: x.ar[0], to: "#speaking" }));
     return idx;
   }

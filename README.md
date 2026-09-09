@@ -26,9 +26,9 @@ ships as plain static files.
 ├── CNAME.example              # Rename to CNAME when a custom domain is ready
 ├── media-kit.html             # Speaker / media kit
 ├── articles/                  # Blog: index.html + _template.html (add posts here)
-├── workshops/                 # 14 GENERATED workshop briefs + index.html (tools/gen_workshops.py)
-├── expertise/                 # 10 GENERATED area pages + index.html (tools/gen_expertise.py)
-├── services/                  # 8 GENERATED consulting-service pages + index.html (tools/gen_services.py)
+├── workshops/                 # 14 GENERATED briefs + index.html — ar/ + en/ (tools/gen_workshops.py)
+├── expertise/                 # 10 GENERATED area pages + index.html — ar/ + en/ (tools/gen_expertise.py)
+├── services/                  # 8 GENERATED service pages + index.html — ar/ + en/ (tools/gen_services.py)
 ├── books/viewer.html          # Page-flip reader for the book sample PDFs (?src=&title=)
 ├── assets/
 │   ├── css/styles.css         # Main design system: light/dark, RTL, responsive
@@ -44,14 +44,29 @@ ships as plain static files.
 │       ├── events/ · gallery/ · books/ · research/
 │       └── hero-portrait.jpg
 ├── tools/
-│   ├── gen_workshops.py       # → workshops/*.html + workshops/index.html
-│   ├── gen_expertise.py       # → expertise/*.html + expertise/index.html (+ concept art)
-│   ├── gen_services.py        # → services/*.html + services/index.html (+ concept art)
+│   ├── _art.py                # Concept illustrations shared by the generators below
+│   ├── workshops_en.py        # English text for the workshop pages, keyed by slug
+│   ├── gen_workshops.py       # → workshops/{,en/}*.html + both index.html
+│   ├── gen_expertise.py       # → expertise/{,en/}*.html + both index.html (+ concept art)
+│   ├── gen_services.py        # → services/{,en/}*.html + both index.html (+ concept art)
 │   ├── build.py               # → ar/index.html + sitemap lastmod
 │   └── optimize_images.py     # (re)compress assets/img + build icons
 ├── IMPROVEMENTS.md            # Change log + TODO tracker
 └── README.md
 ```
+
+## Languages
+
+The home page is bilingual and switches in place (`#langToggle`, remembered in
+`localStorage`); `/ar/` is a generated Arabic mirror of `/index.html` for
+crawlers. Every sub-page exists twice — Arabic at `<section>/<slug>.html` and
+English at `<section>/en/<slug>.html` — paired with `hreflang` and a switch
+link in the header. `main.js` sends each card to the page in the active
+language. The workshops themselves are delivered in Arabic; the English pages
+say so in the meta box.
+
+`media-kit.html` is deliberately one bilingual page (Arabic and English bios
+side by side) rather than a pair — it is written for organisers who need both.
 
 ## Rebuilding derived files
 
@@ -59,6 +74,7 @@ ships as plain static files.
 python tools/gen_workshops.py   # after editing workshop content
 python tools/gen_expertise.py   # after editing expertise content / area services
 python tools/gen_services.py    # after editing consulting-service content
+# each gen_* script writes BOTH languages; English text lives beside the Arabic
 python tools/build.py           # after editing index.html (rebuilds ar/) — run the gen_* scripts first
 python tools/optimize_images.py # after adding images  (--dry-run to preview)
 ```

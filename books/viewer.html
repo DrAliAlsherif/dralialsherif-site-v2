@@ -137,7 +137,31 @@
   var title = qs.get("title") || "";
   var $ = function (id) { return document.getElementById(id); };
 
-  if (title) { $("bookTitle").textContent = title; document.title = title + " — تصفّح الكتاب"; }
+  // Chrome strings follow ?lang; the books themselves are in Arabic.
+  var EN = qs.get("lang") === "en";
+  var T = EN ? {
+    read: "Read the book", hint: "Drag the page edge or use the buttons to turn pages",
+    loading: "Preparing the book…", prev: "Previous", next: "Next",
+    openPdf: "Open the PDF", download: "Download the file", back: "Back to the books",
+    page: "Page ", openInPdf: "Open it in the PDF", fallback: "You can open the PDF directly."
+  } : {
+    read: "تصفّح الكتاب", hint: "اسحب حافة الصفحة أو استخدم الأزرار للتنقّل",
+    loading: "جارٍ تحضير الكتاب…", prev: "السابق", next: "التالي",
+    openPdf: "فتح ملف PDF", download: "تنزيل الملف", back: "عودة إلى الكتب",
+    page: "صفحة ", openInPdf: "فتحها في PDF", fallback: "يمكنك فتح ملف PDF مباشرةً."
+  };
+  if (EN) {
+    document.documentElement.lang = "en";
+    document.documentElement.dir = "ltr";
+  }
+  $("bookTitle").textContent = title || T.read;
+  document.title = (title ? title + " — " : "") + T.read + " — Dr. Ali Fathy Alsherif";
+  $("hint").textContent = T.hint;
+  $("ovText").textContent = T.loading;
+  $("prev").querySelector("span").textContent = T.prev;
+  $("next").querySelector("span").textContent = T.next;
+  $("openPdf").title = T.openPdf;
+  $("openPdf").setAttribute("aria-label", T.openPdf);
   if (src) { $("openPdf").href = src; }
 
   var overlay = $("overlay"), ovText = $("ovText"), ovSub = $("ovSub");
@@ -146,11 +170,11 @@
   function fail(msg) {
     spin.hidden = true; progWrap.hidden = true;
     ovText.textContent = "تعذّر عرض الكتاب على شكل صفحات";
-    ovSub.textContent = msg || "يمكنك فتح ملف PDF مباشرةً.";
+    ovSub.textContent = msg || T.fallback;
     var box = $("errActions"); box.hidden = false;
-    box.innerHTML = '<a href="' + encodeURI(src) + '" target="_blank" rel="noopener">فتح ملف PDF</a>' +
-                    '<a href="' + encodeURI(src) + '" download>تنزيل الملف</a>' +
-                    '<a href="../index.html#books">عودة إلى الكتب</a>';
+    box.innerHTML = '<a href="' + encodeURI(src) + '" target="_blank" rel="noopener">' + T.openPdf + '</a>' +
+                    '<a href="' + encodeURI(src) + '" download>' + T.download + '</a>' +
+                    '<a href="../index.html#books">' + T.back + '</a>';
   }
 
   if (!src) { fail("لم يُحدَّد ملف للعرض."); return; }
@@ -186,7 +210,7 @@
     cache[i] = "skip";
     var d = document.createElement("div");
     d.className = "pg-skip";
-    d.innerHTML = 'صفحة ' + (i + 1) + '<a href="' + encodeURI(src) + '" target="_blank" rel="noopener">فتحها في PDF</a>';
+    d.innerHTML = T.page + (i + 1) + '<a href="' + encodeURI(src) + '" target="_blank" rel="noopener">' + T.openInPdf + '</a>';
     placeSlot(i, d);
   }
 
