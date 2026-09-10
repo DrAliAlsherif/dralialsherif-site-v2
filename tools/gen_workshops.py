@@ -720,6 +720,27 @@ def check_parallel():
             assert EN[w["slug"]].get(f), f'{w["slug"]}.{f} is empty in workshops_en.py'
 
 
+PHOTOS = SITE / "assets" / "img" / "workshops"
+
+
+def art_band(slug, up):
+    """The card photo, reused as the page's opening band.
+
+    Skipped when the file is absent, so a workshop without artwork simply
+    opens on its meta box the way every workshop page did before.
+    """
+    src = PHOTOS / f"{slug}.jpg"
+    if not src.exists():
+        return ""
+    from PIL import Image
+    with Image.open(src) as im:
+        w, h = im.size
+    return (f'    <div class="wsp-art wsp-art--photo">'
+            f'<img src="{up}assets/img/workshops/{slug}.jpg" alt="" '
+            f'width="{w}" height="{h}" decoding="async" fetchpriority="high" />'
+            f'</div>')
+
+
 PAGE = """<!DOCTYPE html>
 <html lang="{lang}" dir="{dir}">
 <head>
@@ -744,7 +765,7 @@ PAGE = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?{fonts}&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="{up}assets/css/subpage.css?v=2" />
+<link rel="stylesheet" href="{up}assets/css/subpage.css?v=3" />
 <script type="application/ld+json">
 {{
   "@context": "https://schema.org",
@@ -802,6 +823,7 @@ PAGE = """<!DOCTYPE html>
     <p class="wsp-kicker">{kicker}</p>
     <h1 class="wsp-title">{title}</h1>
     <p class="wsp-title-en" lang="{other_lang}"><bdi>{title_other}</bdi></p>
+{art}
     <p class="wsp-overview">{overview}</p>
 
     <aside class="wsp-meta" aria-label="{meta_label}">
@@ -880,7 +902,7 @@ INDEX = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?{fonts}&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="{up}assets/css/subpage.css?v=2" />
+<link rel="stylesheet" href="{up}assets/css/subpage.css?v=3" />
 <script type="application/ld+json">
 {itemlist}
 </script>
@@ -947,6 +969,7 @@ def build(lang):
             lang=lang, dir=c["dir"], locale=c["locale"], fonts=c["fonts"], up=up,
             site_url=SITE_URL, canonical=url_for(w["slug"], lang),
             alternates=alternates(w["slug"]), slug=w["slug"],
+            art=art_band(w["slug"], up),
             title=html.escape(f["title"], quote=False),
             title_plain=html.escape(plain(f["title"])),
             title_other=html.escape(f_other["title"], quote=False),

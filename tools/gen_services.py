@@ -825,7 +825,7 @@ PAGE = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?{fonts}&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="{up}assets/css/subpage.css?v=2" />
+<link rel="stylesheet" href="{up}assets/css/subpage.css?v=3" />
 <script type="application/ld+json">
 {{
   "@context": "https://schema.org",
@@ -958,7 +958,7 @@ INDEX = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?{fonts}&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="{up}assets/css/subpage.css?v=2" />
+<link rel="stylesheet" href="{up}assets/css/subpage.css?v=3" />
 <script type="application/ld+json">
 {itemlist}
 </script>

@@ -170,6 +170,11 @@ html[dir="rtl"] .wsp-back svg{transform:scaleX(-1)}
 .wsp-art::after{content:"";position:absolute;inset:0;opacity:.55;pointer-events:none;
   background-image:radial-gradient(rgba(200,214,255,.16) 1px,transparent 1.5px);background-size:15px 15px;
   -webkit-mask-image:linear-gradient(180deg,#000,transparent);mask-image:linear-gradient(180deg,#000,transparent)}
+/* Photo variant: the image covers the panel, so the dot overlay that sits on
+   top of an SVG drawing would only add noise over a photograph. */
+.wsp-art--photo::after{content:none}
+.wsp-art--photo img{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;display:block}
 .wsp-art .ra{position:relative;width:100%;height:100%;display:block}
 .wsp-art .ra-edge{stroke:rgba(190,205,255,.30);stroke-width:1.1;fill:none}
 .wsp-art .ra-stroke{fill:none;stroke:rgba(228,234,255,.88);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
