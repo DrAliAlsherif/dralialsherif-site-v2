@@ -752,7 +752,7 @@ PAGE = """<!DOCTYPE html>
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <link rel="canonical" href="{canonical}" />
 {alternates}
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%234f46e5'/%3E%3Ctext x='50' y='68' font-size='54' font-family='Georgia,serif' font-weight='700' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Crect%20width%3D%27100%27%20height%3D%27100%27%20rx%3D%2722%27%20fill%3D%27%234f46e5%27%2F%3E%3Cpath%20d%3D%27M50%2021%2084%2038%2050%2055%2016%2038Z%27%20fill%3D%27%23fff%27%2F%3E%3Cpath%20d%3D%27M16%2052%2050%2069%2084%2052%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-width%3D%279%27%20stroke-linejoin%3D%27round%27%20stroke-linecap%3D%27round%27%20opacity%3D%27.72%27%2F%3E%3Cpath%20d%3D%27M16%2066%2050%2083%2084%2066%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-width%3D%279%27%20stroke-linejoin%3D%27round%27%20stroke-linecap%3D%27round%27%20opacity%3D%27.45%27%2F%3E%3C%2Fsvg%3E" />
 <meta property="og:type" content="article" />
 <meta property="og:title" content="{title}" />
 <meta property="og:description" content="{meta_desc}" />
@@ -765,7 +765,7 @@ PAGE = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?{fonts}&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="{up}assets/css/subpage.css?v=4" />
+<link rel="stylesheet" href="{up}assets/css/subpage.css?v=5" />
 <script type="application/ld+json">
 {{
   "@context": "https://schema.org",
@@ -796,7 +796,7 @@ PAGE = """<!DOCTYPE html>
 <header class="wsp-header">
   <div class="wsp-container wsp-header-inner">
     <a class="wsp-brand" href="{home_href}">
-      <span class="wsp-brand-mark">AF</span>
+      <span class="wsp-brand-mark"><svg class="mark-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4 21.4 8.2 12 13 2.6 8.2Z" fill="currentColor"/><path d="M2.6 12.4 12 17.2 21.4 12.4" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round" opacity=".72"/><path d="M2.6 16.4 12 21.2 21.4 16.4" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round" opacity=".45"/></svg></span>
       <span class="wsp-brand-text">
         <span class="wsp-brand-name">{brand_name}</span>
         <span class="wsp-brand-role">{brand_role}</span>
@@ -892,7 +892,7 @@ INDEX = """<!DOCTYPE html>
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <link rel="canonical" href="{canonical}" />
 {alternates}
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%234f46e5'/%3E%3Ctext x='50' y='68' font-size='54' font-family='Georgia,serif' font-weight='700' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Crect%20width%3D%27100%27%20height%3D%27100%27%20rx%3D%2722%27%20fill%3D%27%234f46e5%27%2F%3E%3Cpath%20d%3D%27M50%2021%2084%2038%2050%2055%2016%2038Z%27%20fill%3D%27%23fff%27%2F%3E%3Cpath%20d%3D%27M16%2052%2050%2069%2084%2052%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-width%3D%279%27%20stroke-linejoin%3D%27round%27%20stroke-linecap%3D%27round%27%20opacity%3D%27.72%27%2F%3E%3Cpath%20d%3D%27M16%2066%2050%2083%2084%2066%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-width%3D%279%27%20stroke-linejoin%3D%27round%27%20stroke-linecap%3D%27round%27%20opacity%3D%27.45%27%2F%3E%3C%2Fsvg%3E" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="{index_title} — {brand_name}" />
 <meta property="og:description" content="{index_desc}" />
@@ -902,7 +902,7 @@ INDEX = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?{fonts}&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="{up}assets/css/subpage.css?v=4" />
+<link rel="stylesheet" href="{up}assets/css/subpage.css?v=5" />
 <script type="application/ld+json">
 {itemlist}
 </script>
@@ -912,7 +912,7 @@ INDEX = """<!DOCTYPE html>
 <header class="wsp-header">
   <div class="wsp-container wsp-header-inner">
     <a class="wsp-brand" href="{home_href}">
-      <span class="wsp-brand-mark">AF</span>
+      <span class="wsp-brand-mark"><svg class="mark-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4 21.4 8.2 12 13 2.6 8.2Z" fill="currentColor"/><path d="M2.6 12.4 12 17.2 21.4 12.4" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round" opacity=".72"/><path d="M2.6 16.4 12 21.2 21.4 16.4" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round" opacity=".45"/></svg></span>
       <span class="wsp-brand-text">
         <span class="wsp-brand-name">{brand_name}</span>
         <span class="wsp-brand-role">{brand_role}</span>

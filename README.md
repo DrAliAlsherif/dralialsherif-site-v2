@@ -49,6 +49,7 @@ ships as plain static files.
 │   ├── prepare_workshop_photos.py  # workshops/photos/ → assets/img/workshops/ (16:7.4)
 │   ├── prepare_service_photos.py   # Consulting photos/ → assets/img/services/ (16:8.4)
 │   ├── service-image-prompts.md    # prompts for the service card artwork
+│   ├── logo-prompts.md        # brand-mark concepts; the chosen one is inline SVG
 │   ├── workshop-image-prompts.md   # prompts + status for the workshop card artwork
 │   ├── workshops_en.py        # English text for the workshop pages, keyed by slug
 │   ├── gen_workshops.py       # → workshops/{,en/}*.html + both index.html

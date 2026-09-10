@@ -110,8 +110,9 @@ h1,h2,h3,h4{font-family:var(--ff-head);line-height:1.15;margin:0;font-weight:700
 .nav-inner{display:flex;align-items:center;gap:1.2rem;height:72px}
 .brand{display:flex;align-items:center;gap:.7rem;margin-inline-end:auto}
 .brand-mark{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;
-  background:var(--brand-grad);color:#fff;font-family:var(--ff-head);font-weight:800;font-size:1.05rem;
-  box-shadow:0 6px 16px rgba(91,75,240,.35)}
+  background:var(--brand-grad);color:#fff;box-shadow:0 6px 16px rgba(91,75,240,.35)}
+/* The mark is the layered-records glyph; it scales with the badge. */
+.mark-glyph{width:64%;height:64%;display:block}
 .brand-text{display:flex;flex-direction:column;line-height:1.15}
 .brand-name{font-family:var(--ff-head);font-weight:700;font-size:.98rem}
 .brand-role{font-size:.72rem;color:var(--text-mute);letter-spacing:.02em}

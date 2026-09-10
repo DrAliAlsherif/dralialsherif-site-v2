@@ -55,8 +55,8 @@ svg{width:1.1em;height:1.1em;fill:none;stroke:currentColor;stroke-width:2;
   gap:1rem;padding-block:.8rem}
 .wsp-brand{display:flex;align-items:center;gap:.65rem}
 .wsp-brand-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:11px;
-  background:var(--brand-grad);color:#fff;font-weight:700;font-family:var(--ff);
-  letter-spacing:.5px;box-shadow:var(--shadow-sm)}
+  background:var(--brand-grad);color:#fff;box-shadow:var(--shadow-sm)}
+.mark-glyph{width:64%;height:64%;display:block}
 .wsp-brand-text{display:flex;flex-direction:column;line-height:1.25}
 .wsp-brand-name{font-weight:700;font-size:.98rem}
 .wsp-brand-role{font-size:.78rem;color:var(--text-mute)}
