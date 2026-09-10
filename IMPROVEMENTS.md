@@ -34,6 +34,7 @@ Public URL for this copy: `https://dralialsherif.github.io/dralialsherif-site-v2
 | 23 | Photos on the consulting service cards | ✅ | The eight service cards showed SVG diagrams; each now carries its own photo, layered over that SVG which stays as the load-failure fallback. The same image opens the service page in both languages. Service card geometry differs from the workshops': 16:8.4, and the round `.sicon` badge straddles the *bottom* edge on the reading-start side, so the prompts kept subjects high and lower corners dark. `tools/_photos.py` now holds the crop/compress/sync shared by both prepare scripts. See `tools/service-image-prompts.md` |
 | 24 | A brand mark instead of the AF monogram | ✅ | The badge beside the name was the initials `AF`, and the favicon a serif `A` set in Georgia — a face used nowhere else on the site. Both are now the same layered-records glyph: three stacked plates, drawn as inline SVG so it stays sharp at the 16px the favicon actually renders at, and inherits `currentColor` so it works white on the gradient in either theme. Applied to all 79 pages, the four generators, the book viewer and the intro page — which turned out to have had no favicon at all. Concepts and prompts in `tools/logo-prompts.md` |
 | 25 | Photos on the expertise cards | ✅ | The last grid still showing SVG diagrams. Eight of the ten areas share a subject with a service that already had a photo, so rather than repeat the idea the prompts were built on a split: a service image shows a *change* (scattered becoming ordered, stone becoming light), an expertise image shows a *place* (a reading room, a vault, a hall of racks). Same subjects, different register, so the two grids never echo. Card is 16:8.4 with nothing overlapping it. `tools/prepare_expertise_photos.py` is thin config over `_photos.py`. See `tools/expertise-image-prompts.md` |
+| 26 | Photos on the project cards | ✅ | The fourth and last grid. These cards name real institutions, so every scene is a deliberate abstraction of the *work delivered* — a repository founded, a collection tagged, a wall of spines classified — never a depiction of the client: no recognisable building, logo or signage. Projects were also the only cards on the site with no `slug`; nine were added to `DATA.projects`. Widest band on the site at 16:6.6, nothing overlapping. Cards only — projects have no detail pages. See `tools/project-image-prompts.md` |
 
 ## Build commands
 
@@ -44,6 +45,7 @@ python tools/gen_services.py      # regenerate the 8 service pages (ar + en) + i
 python tools/prepare_workshop_photos.py   # re-crop workshop card photos after adding sources
 python tools/prepare_service_photos.py    # re-crop service card photos after adding sources
 python tools/prepare_expertise_photos.py  # re-crop expertise card photos after adding sources
+python tools/prepare_project_photos.py    # re-crop project card photos after adding sources
 python tools/build.py             # regenerate ar/index.html + refresh sitemap lastmod
 python tools/optimize_images.py   # (re)compress assets/img + regenerate icons  [--dry-run to preview]
 ```

@@ -50,6 +50,8 @@ ships as plain static files.
 │   ├── prepare_service_photos.py   # Consulting photos/ → assets/img/services/ (16:8.4)
 │   ├── prepare_expertise_photos.py # Areas of expertise/ → assets/img/expertise/ (16:8.4)
 │   ├── expertise-image-prompts.md  # prompts for the expertise card artwork
+│   ├── prepare_project_photos.py   # Projects photos/ → assets/img/projects/ (16:6.6)
+│   ├── project-image-prompts.md    # prompts for the project card artwork
 │   ├── service-image-prompts.md    # prompts for the service card artwork
 │   ├── logo-prompts.md        # brand-mark concepts; the chosen one is inline SVG
 │   ├── workshop-image-prompts.md   # prompts + status for the workshop card artwork

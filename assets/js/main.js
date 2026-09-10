@@ -717,6 +717,7 @@
     projects: [
       {
         group: "repo", art: "repository",
+        slug: "jumeira-repository",
         title: { en: "Digital Repository for Jumeira University", ar: "المستودع الرقمي لجامعة جميرا" },
         meta: { en: "DSpace · Dubai, UAE · 2020", ar: "DSpace · دبي، الإمارات · 2020" },
         role: { en: "Planning & building — Lead", ar: "التخطيط والبناء — قائد المشروع" },
@@ -728,6 +729,7 @@
       },
       {
         group: "ai", art: "ai",
+        slug: "cat-ai",
         title: { en: "CAT-AI — AI-Powered Intelligent Cataloging System", ar: "مشروع CAT-AI — نظام الفهرسة الذكي المدعوم بالذكاء الاصطناعي" },
         meta: { en: "42 Abu Dhabi, UAE · 2024–2025", ar: "42 أبوظبي، الإمارات · 2024–2025" },
         role: { en: "Project Manager & General Supervisor", ar: "مدير المشروع والمشرف العام" },
@@ -741,6 +743,7 @@
 
       {
         group: "systems", art: "metadata",
+        slug: "correctional-library",
         title: { en: "Penal & Correctional Institution Library", ar: "مكتبة المؤسسة العقابية والإصلاحية" },
         meta: { en: "Koha ILS · Ras Al Khaimah · Nov 2024 – Feb 2025", ar: "كوها · رأس الخيمة · نوفمبر 2024 – فبراير 2025" },
         role: { en: "Build lead & trainer", ar: "قائد البناء والتدريب" },
@@ -752,6 +755,7 @@
       },
       {
         group: "systems", art: "technical",
+        slug: "mawahib-library",
         title: { en: "Mawahib Library — Government Empowerment Dept.", ar: "مكتبة مواهب — دائرة تمكين الحكومة" },
         meta: { en: "Koha ILS · Abu Dhabi · Jan – May 2023", ar: "كوها · أبوظبي · يناير – مايو 2023" },
         role: { en: "Build lead & trainer", ar: "قائد البناء والتدريب" },
@@ -763,6 +767,7 @@
       },
       {
         group: "systems", art: "security",
+        slug: "heritage-center-library",
         title: { en: "Library — Hamad Bin Mohammed Center for Heritage Revival", ar: "مكتبة مركز حمد بن محمد لإحياء التراث" },
         meta: { en: "Symphony ILS · Dubai · 2018 – 2021", ar: "سيمفوني · دبي · 2018 – 2021" },
         role: { en: "Supervisor", ar: "مشرف" },
@@ -775,6 +780,7 @@
 
       {
         group: "catalog", art: "technical",
+        slug: "ministry-of-culture",
         title: { en: "Ministry of Culture & Knowledge Development", ar: "وزارة الثقافة وتنمية المعرفة" },
         meta: { en: "Library automation · UAE · all branches", ar: "أتمتة المكتبات · الإمارات · جميع الفروع" },
         role: { en: "Team lead — technical processing", ar: "قائد فريق — المعالجة الفنية" },
@@ -786,6 +792,7 @@
       },
       {
         group: "catalog", art: "metadata",
+        slug: "national-library",
         title: { en: "National Library, UAE", ar: "المكتبة الوطنية، الإمارات" },
         meta: { en: "Horizon LMS · Abu Dhabi", ar: "هورايزن · أبوظبي" },
         role: { en: "Cataloger & operations monitor", ar: "مفهرس ومراقب العمليات" },
@@ -797,6 +804,7 @@
       },
       {
         group: "catalog", art: "library",
+        slug: "tabah-foundation",
         title: { en: "Tabah Foundation Library", ar: "مكتبة مؤسسة طابة" },
         meta: { en: "Library launch · Abu Dhabi · 2013", ar: "تأسيس مكتبة · أبوظبي · 2013" },
         role: { en: "Launch & training lead", ar: "قائد التأسيس والتدريب" },
@@ -808,6 +816,7 @@
       },
       {
         group: "catalog", art: "library",
+        slug: "rta-library",
         title: { en: "RTA Library", ar: "مكتبة هيئة الطرق والمواصلات" },
         meta: { en: "LC Classification · Dubai · 2011 – 2012", ar: "تصنيف الكونغرس · دبي · 2011 – 2012" },
         role: { en: "Library operations & cataloging", ar: "عمليات المكتبة والفهرسة" },
@@ -1223,6 +1232,22 @@
 
   // Sub-page hubs exist in both languages: services/ (ar) and services/en/.
   // The markup carries the Arabic path, so retarget on every language change.
+  // Project slugs that have a card photo in assets/img/projects/.
+  // Maintained by tools/prepare_project_photos.py — edit there, not here.
+  // PROJECT_PHOTOS:start
+  const PROJECT_PHOTOS = new Set([
+    "jumeira-repository",
+    "cat-ai",
+    "correctional-library",
+    "mawahib-library",
+    "heritage-center-library",
+    "ministry-of-culture",
+    "national-library",
+    "tabah-foundation",
+    "rta-library",
+  ]);
+  // PROJECT_PHOTOS:end
+
   // Expertise slugs that have a card photo in assets/img/expertise/.
   // Maintained by tools/prepare_expertise_photos.py — edit there, not here.
   // EXPERTISE_PHOTOS:start
@@ -1280,7 +1305,7 @@
   // that fails to load is removed, revealing the SVG underneath, so a grid
   // stays whole while images are still being added one by one.
   function dropMissingPhotos() {
-    $$(".wcard-photo, .scard-photo, .xcard-photo").forEach((img) => {
+    $$(".wcard-photo, .scard-photo, .xcard-photo, .pcard-photo").forEach((img) => {
       img.addEventListener("error", () => img.remove(), { once: true });
       if (img.complete && img.naturalWidth === 0) img.remove();
     });
@@ -1443,7 +1468,7 @@
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>${t("projects.watch")}</button>`
           : "";
         return `<article class="pcard reveal">
-          <div class="pcard-media art-panel">${RART[p.art]()}</div>
+          <div class="pcard-media art-panel">${RART[p.art]()}${PROJECT_PHOTOS.has(p.slug) ? `<img class="pcard-photo" src="${ROOT}assets/img/projects/${p.slug}.jpg" alt="" loading="lazy" decoding="async" width="1584" height="653" />` : ""}</div>
           <div class="pcard-body">
             <span class="pcard-role">${p.role[lang]}</span>
             <h4>${p.title[lang]}</h4>
