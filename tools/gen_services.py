@@ -803,6 +803,23 @@ def other_services(cur, lang, up):
     return "\n        ".join(out[:4])
 
 
+PHOTOS = ROOT / "assets" / "img" / "services"
+
+
+def art_band(slug, up, fallback_svg):
+    """The card photo as the page's opening band, or the SVG if there is none."""
+    src = PHOTOS / f"{slug}.jpg"
+    if not src.exists():
+        return f'    <div class="wsp-art">{fallback_svg}</div>'
+    from PIL import Image
+    with Image.open(src) as im:
+        w, h = im.size
+    return (f'    <div class="wsp-art wsp-art--photo">'
+            f'<img src="{up}assets/img/services/{slug}.jpg" alt="" '
+            f'width="{w}" height="{h}" decoding="async" fetchpriority="high" />'
+            f'</div>')
+
+
 PAGE = """<!DOCTYPE html>
 <html lang="{lang}" dir="{dir}">
 <head>
@@ -825,7 +842,7 @@ PAGE = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?{fonts}&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="{up}assets/css/subpage.css?v=3" />
+<link rel="stylesheet" href="{up}assets/css/subpage.css?v=4" />
 <script type="application/ld+json">
 {{
   "@context": "https://schema.org",
@@ -879,7 +896,7 @@ PAGE = """<!DOCTYPE html>
     <h1 class="wsp-title">{title}</h1>
     <p class="wsp-title-en" lang="{other_lang}"><bdi>{title_other}</bdi></p>
 
-    <div class="wsp-art">{art}</div>
+{art}
 
     {intro}
 
@@ -958,7 +975,7 @@ INDEX = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?{fonts}&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="{up}assets/css/subpage.css?v=3" />
+<link rel="stylesheet" href="{up}assets/css/subpage.css?v=4" />
 <script type="application/ld+json">
 {itemlist}
 </script>
@@ -1031,7 +1048,7 @@ def build(lang):
             other_lang=other,
             meta_desc=html.escape(md),
             catalog=html.escape(c["catalog"].format(s["title"][lang])),
-            art=ART[s["art"]](),
+            art=art_band(s["slug"], up, ART[s["art"]]()),
             intro=paras(s["intro"][lang]),
             scope=li(s["scope"][lang]),
             deliverables=li(s["deliverables"][lang]),

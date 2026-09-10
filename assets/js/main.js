@@ -1223,6 +1223,21 @@
 
   // Sub-page hubs exist in both languages: services/ (ar) and services/en/.
   // The markup carries the Arabic path, so retarget on every language change.
+  // Service slugs that have a card photo in assets/img/services/.
+  // Maintained by tools/prepare_service_photos.py — edit there, not here.
+  // SERVICE_PHOTOS:start
+  const SERVICE_PHOTOS = new Set([
+    "ai-consulting",
+    "library-automation",
+    "digital-repositories",
+    "archive-consulting",
+    "metadata-consulting",
+    "training-programs",
+    "research-consulting",
+    "digital-transformation",
+  ]);
+  // SERVICE_PHOTOS:end
+
   // Workshop slugs that have a card photo in assets/img/workshops/.
   // Maintained by tools/prepare_workshop_photos.py — edit there, not here.
   // WORKSHOP_PHOTOS:start
@@ -1244,11 +1259,11 @@
   ]);
   // WORKSHOP_PHOTOS:end
 
-  // Workshop cards layer a photo over the generated SVG. Any photo that fails
-  // to load is removed, revealing the SVG underneath — so the grid stays whole
-  // while images are still being added one by one.
+  // Workshop and service cards layer a photo over their generated SVG. A photo
+  // that fails to load is removed, revealing the SVG underneath, so a grid
+  // stays whole while images are still being added one by one.
   function dropMissingPhotos() {
-    $$(".wcard-photo").forEach((img) => {
+    $$(".wcard-photo, .scard-photo").forEach((img) => {
       img.addEventListener("error", () => img.remove(), { once: true });
       if (img.complete && img.naturalWidth === 0) img.remove();
     });
@@ -1393,7 +1408,6 @@
         </div>
       </article>`;
     }).join("");
-    dropMissingPhotos();
 
     // Projects (grouped)
     const pgroups = [
@@ -1479,7 +1493,7 @@
       const href = `${ROOT}services/${lang === "ar" ? "" : "en/"}${x.slug}.html`;
       const more = lang === "ar" ? "تفاصيل الخدمة" : "Service details";
       return `<article class="scard reveal" style="transition-delay:${(i % 4) * 40}ms">
-        <a class="scard-art art-panel" href="${href}" aria-label="${ti}">${RART[x.art]()}</a>
+        <a class="scard-art art-panel" href="${href}" aria-label="${ti}">${RART[x.art]()}${SERVICE_PHOTOS.has(x.slug) ? `<img class="scard-photo" src="${ROOT}assets/img/services/${x.slug}.jpg" alt="" loading="lazy" decoding="async" width="1280" height="672" />` : ""}</a>
         <div class="scard-body">
           <div class="sicon">${ICONS[x.icon]}</div>
           <h3><a class="scard-link" href="${href}">${ti}</a></h3>
@@ -1582,6 +1596,7 @@
         </div>
       </article>`;
     }).join("");
+    dropMissingPhotos();
     observeReveal();
   }
 

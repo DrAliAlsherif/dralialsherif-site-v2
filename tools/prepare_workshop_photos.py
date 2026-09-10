@@ -1,37 +1,23 @@
 # -*- coding: utf-8 -*-
-"""Crop and compress workshop card photos.
+"""Crop and compress the workshop card photos.
 
-    python tools/prepare_workshop_photos.py
+    python tools/prepare_workshop_photos.py [n ...]
 
-Reads workshops/photos/<n>. <anything>.jfif|jpg|png — the leading number is the
-workshop's position in WORKSHOPS (gen_workshops.py) — and writes
-assets/img/workshops/<slug>.jpg at the card's aspect ratio.
+Reads workshops/photos/<n>. <anything> — the leading number is the workshop's
+position in WORKSHOPS (gen_workshops.py) — and writes
+assets/img/workshops/<slug>.jpg at the .wcard-media ratio. Pass numbers to
+redo only those. All the real work is in tools/_photos.py.
 
-Two things happen on the way in:
-
-* the frame is cropped to 16:7.4, the .wcard-media ratio, so the browser is
-  never asked to letterbox or squash;
-* KEEP trims the bottom of the frame first. The image generator parked a
-  "SHARED STYLE BLOCK" chrome bar along the bottom edge of several images —
-  scaffolding from the prompt, not artwork — and this removes it. An image
-  that arrives clean should be listed at 1.0.
-
-Cards fall back to the generated SVG for any slug with no file here, so it is
-safe to ship a partial set (see dropMissingPhotos in assets/js/main.js).
+The same images open each workshop page; run tools/gen_workshops.py after
+adding one so the page picks it up.
 """
 import pathlib
-import re
 import sys
 
-from PIL import Image
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from _photos import run  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-SRC = ROOT / "workshops" / "photos"
-OUT = ROOT / "assets" / "img" / "workshops"
-OUT.mkdir(parents=True, exist_ok=True)
-
-RATIO = 16 / 7.4
-MAX_BYTES = 180_000
 
 # Order must match WORKSHOPS in gen_workshops.py.
 SLUGS = [
@@ -44,81 +30,23 @@ SLUGS = [
     "repositories-archiving-ai-open-access",
 ]
 
-# Images held back from the site. Empty now — the first pass had eight rejects
-# (burnt-in English wording on a bilingual page, prompt scaffolding drawn as UI
-# chrome, white grounds inside a dark grid, wrong-domain subject matter) and all
-# eight were reshot from the rewritten prompts in workshop-image-prompts.md.
-# Add a slug here with its reason to pull a card's photo without deleting it.
+# Slugs to keep off the site without deleting their source. Empty now: the
+# first pass had eight rejects (English wording burnt into images that also
+# render on the Arabic page, prompt scaffolding drawn as UI chrome, white
+# grounds inside a dark grid, wrong-domain subject matter) and all eight were
+# reshot from the rewritten prompts in workshop-image-prompts.md.
 HOLD = {}
 
-# Fraction of the source height to keep, per workshop number. Only the four
-# survivors of the first batch still carry the generator's chrome bar along
-# their bottom edge; everything else keeps its full frame.
+# Only the four survivors of that first batch still carry the generator's
+# chrome bar along their bottom edge; everything else keeps its full frame.
 KEEP = {3: .74, 4: .74, 8: .74, 9: .74}
 
-
-def prepare(src: pathlib.Path, dst: pathlib.Path, keep: float) -> tuple:
-    im = Image.open(src).convert("RGB")
-    w, h = im.size
-    im = im.crop((0, 0, w, round(h * keep)))
-    w, h = im.size
-    tw = round(h * RATIO)
-    if tw <= w:                                   # centre-crop the width
-        x = (w - tw) // 2
-        im = im.crop((x, 0, x + tw, h))
-    else:                                         # too tall: trim height
-        im = im.crop((0, 0, w, round(w / RATIO)))
-    quality = 84
-    while True:
-        im.save(dst, "JPEG", quality=quality, optimize=True, progressive=True)
-        if dst.stat().st_size <= MAX_BYTES or quality <= 60:
-            return im.size, dst.stat().st_size, quality
-        quality -= 4
-
-
-def sync_main_js():
-    """Point main.js at exactly the photos that exist on disk.
-
-    The cards skip the <img> entirely for a slug not in this set, so a
-    workshop still waiting for its photo costs no failed request.
-    """
-    js = ROOT / "assets" / "js" / "main.js"
-    text = js.read_text(encoding="utf-8")
-    have = [s for s in SLUGS if (OUT / f"{s}.jpg").exists()]
-    if have:
-        listing = "".join('\n    "%s",' % s for s in have)
-        body = "  const WORKSHOP_PHOTOS = new Set([%s\n  ]);" % listing
-    else:
-        body = "  const WORKSHOP_PHOTOS = new Set([]);"
-    start = "  // WORKSHOP_PHOTOS:start\n"
-    end = "  // WORKSHOP_PHOTOS:end"
-    i = text.index(start) + len(start)
-    j = text.index(end)
-    js.write_text(text[:i] + body + "\n" + text[j:], encoding="utf-8")
-    print("main.js: WORKSHOP_PHOTOS lists %d of %d workshops" % (len(have), len(SLUGS)))
-
-
-def main():
-    wanted = set(sys.argv[1:])                    # optional: only these numbers
-    found = {}
-    for p in SRC.iterdir():
-        m = re.match(r"(\d+)", p.name)
-        if m and p.suffix.lower() in (".jfif", ".jpg", ".jpeg", ".png"):
-            found[int(m.group(1))] = p
-    if not found:
-        sys.exit(f"no numbered images in {SRC}")
-
-    for n, slug in enumerate(SLUGS, 1):
-        if n not in found or (wanted and str(n) not in wanted):
-            continue
-        if slug in HOLD:
-            (OUT / f"{slug}.jpg").unlink(missing_ok=True)
-            print(f"{n:2d} {slug:40s} HELD — {HOLD[slug]}")
-            continue
-        size, nbytes, q = prepare(found[n], OUT / f"{slug}.jpg", KEEP.get(n, 1.0))
-        print(f"{n:2d} {slug:40s} {size[0]}x{size[1]}  {nbytes // 1024:3d}KB  q{q}")
-    sync_main_js()
-
-
 if __name__ == "__main__":
-    main()
+    run(
+        src_dir=ROOT / "workshops" / "photos",
+        out_dir=ROOT / "assets" / "img" / "workshops",
+        slugs=SLUGS, ratio=16 / 7.4,
+        js_path=ROOT / "assets" / "js" / "main.js",
+        js_marker="WORKSHOP_PHOTOS", js_const="WORKSHOP_PHOTOS",
+        keep=KEEP, hold=HOLD, only=set(sys.argv[1:]),
+    )

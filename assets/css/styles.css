@@ -809,7 +809,9 @@ section[id]{scroll-margin-top:90px}
   .to-top.show:hover{transform:none}
 }
 
-/* Workshop card photo — layered over the generated SVG in .wcard-media, which
-   shows through if the photo is missing (see dropMissingPhotos in main.js). */
-.wcard-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  display:block;z-index:1}
+/* Card photos — layered over the generated SVG in .wcard-media / .scard-art,
+   which shows through if the photo is missing (dropMissingPhotos in main.js).
+   .scard-art is a plain block, so it needs position for the absolute child. */
+.wcard-photo,.scard-photo{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;display:block;z-index:1}
+.scard-art{position:relative}
