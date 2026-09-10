@@ -1223,6 +1223,23 @@
 
   // Sub-page hubs exist in both languages: services/ (ar) and services/en/.
   // The markup carries the Arabic path, so retarget on every language change.
+  // Expertise slugs that have a card photo in assets/img/expertise/.
+  // Maintained by tools/prepare_expertise_photos.py — edit there, not here.
+  // EXPERTISE_PHOTOS:start
+  const EXPERTISE_PHOTOS = new Set([
+    "academic-libraries",
+    "digital-repositories",
+    "archives-preservation",
+    "knowledge-management",
+    "artificial-intelligence",
+    "digital-transformation",
+    "metadata-standards",
+    "research-support",
+    "training-capacity",
+    "consulting",
+  ]);
+  // EXPERTISE_PHOTOS:end
+
   // Service slugs that have a card photo in assets/img/services/.
   // Maintained by tools/prepare_service_photos.py — edit there, not here.
   // SERVICE_PHOTOS:start
@@ -1263,7 +1280,7 @@
   // that fails to load is removed, revealing the SVG underneath, so a grid
   // stays whole while images are still being added one by one.
   function dropMissingPhotos() {
-    $$(".wcard-photo, .scard-photo").forEach((img) => {
+    $$(".wcard-photo, .scard-photo, .xcard-photo").forEach((img) => {
       img.addEventListener("error", () => img.remove(), { once: true });
       if (img.complete && img.naturalWidth === 0) img.remove();
     });
@@ -1291,7 +1308,7 @@
       const href = `${ROOT}expertise/${lang === "ar" ? "" : "en/"}${x.slug}.html`;
       const more = lang === "ar" ? "الخدمات والتفاصيل" : "Services & details";
       return `<article class="xcard reveal" style="transition-delay:${(i % 4) * 40}ms">
-        <a class="xart art-panel" href="${href}" aria-label="${ti}">${RART[x.art]()}</a>
+        <a class="xart art-panel" href="${href}" aria-label="${ti}">${RART[x.art]()}${EXPERTISE_PHOTOS.has(x.slug) ? `<img class="xcard-photo" src="${ROOT}assets/img/expertise/${x.slug}.jpg" alt="" loading="lazy" decoding="async" width="1280" height="672" />` : ""}</a>
         <div class="xcard-body">
           <h3><a class="xcard-link" href="${href}">${ti}</a></h3>
           <p>${de}</p>

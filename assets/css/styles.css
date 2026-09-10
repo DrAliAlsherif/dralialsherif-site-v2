@@ -813,6 +813,6 @@ section[id]{scroll-margin-top:90px}
 /* Card photos — layered over the generated SVG in .wcard-media / .scard-art,
    which shows through if the photo is missing (dropMissingPhotos in main.js).
    .scard-art is a plain block, so it needs position for the absolute child. */
-.wcard-photo,.scard-photo{position:absolute;inset:0;width:100%;height:100%;
+.wcard-photo,.scard-photo,.xcard-photo{position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;display:block;z-index:1}
-.scard-art{position:relative}
+.scard-art,.xart{position:relative}
